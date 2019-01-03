@@ -21,18 +21,18 @@
     // Override point for customization after application launch.
     
     M_Object *obj = [[M_Object alloc]init];
+    M_Observer *observer = [[M_Observer alloc]init];
     
-    [obj addObserver:[M_Observer new] forKeyPath:@"count" options:NSKeyValueObservingOptionNew
+    [obj addObserver:observer forKeyPath:@"count" options:NSKeyValueObservingOptionNew
                   context:NULL];
     
-//    obj.count = 1;
+    obj.count = 1;
     
-//    obj.count++;
     
-    //通过KVC的方式，是否触发KVO  会
-//    [obj setValue:@3 forKey:@"count"];
+    //通过KVC的方式设置，是否触发KVO  会
+    [obj setValue:@2 forKey:@"count"];
     
-    // 通过调用方法的成员变量操作，是否触发KVO  不会
+    // 通过成员变量直接赋值，是否触发KVO  不会
     [obj increaseCount];
     
     

@@ -12,11 +12,10 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context
 {
-    NSLog(@"%s object = %@", __FUNCTION__,object);
     //如果监听的类是 M_Observer 且keyPath是count
     if ([object isKindOfClass:[M_Object class]] && [keyPath isEqualToString:@"count"]) {
         
-        NSString *newValue = change[NSKeyValueChangeNewKey];
+        NSString *newValue = [change valueForKey:NSKeyValueChangeNewKey];
         NSLog(@"newValue = %@",newValue);
     }
 }

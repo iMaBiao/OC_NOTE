@@ -10,16 +10,20 @@
 
 @implementation M_Object
 
-//- (void)setCount:(int)count
-//{
-//    _count = count;
-////    [super setValue:@(1) forKey:@"count"];
-//    NSLog(@"count = %d",count);
-//}
+- (instancetype)init
+{
+    if (self = [super init]) {
+        _count = 0;
+    }
+    return self;
+}
 
 - (void)increaseCount
 {
-    _count++;
+    //加上这两句，就是会触发KVO
+//    [self willChangeValueForKey:@"count"];
+    _count += 1;
+//    [self didChangeValueForKey:@"count"];
 }
 
 @end
