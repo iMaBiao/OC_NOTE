@@ -10,6 +10,10 @@ KVO  ： Key-Value Observing
 
  
 
+使用：
+
+
+
 
 
 原理：
