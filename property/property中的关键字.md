@@ -13,22 +13,34 @@ readonly
 2、原子类
 
 atomic: 原子性，线程安全；会添加线程锁，但是做不到真正的、完全的线程安全。而且他还消耗资源。
+如：atomic修饰一个数组,对数组赋值或获取是线程安全的，但是对这个数组进行操作（增加、删除）则不一定线程安全
 
 nonatomic:    非原子性，线程不安全；也就是在多线程的环境下，不会给你添加线程锁，当然添加线程锁必定会消耗资源，所以如果没有特殊需求，还是用nonatomic。
 
 
 
-3、内存类
+
+
+3、引用计数
 
 retain
 
 strong 
 
 weak
+    不改变被i修饰对象的引用计数
+    所指对象在被释放后会自动置为nil
 
 assign
+    修饰基本数据类型（int，BOOL）（可修饰对象）
+    修饰对象类型时，不改变其引用计数
+    所修饰的对象被释放后，assign会继续指向改内存地址，产生悬垂指针
 
 copy
+
+
+
+
 
 ---------
 
@@ -41,7 +53,11 @@ property （编译器）会自动帮助我们生成 getter方法、setter方法�
 如果一个属性带有readonly且我们自己重写了getter方法，编译器又不会帮助我们生成带下划线的成员变量，需要自己补充上去（readonly只会生成getter方法）
 
 
-
+问：
+@property(copy) NSMutableArray *array;
+会导致什么问题？
+如果赋值过来的是NSMutableArray,copy之后是NSArray
+如果赋值过来的是NSArray,copy之后是NSArray
 ---------
 
 
