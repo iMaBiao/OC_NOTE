@@ -1,4 +1,4 @@
-runtime
+## runtime
 
 #### 一、runtime简介
 
@@ -111,8 +111,6 @@ struct objc_class {
 ·cache：Runtime 系统会把被调用的方法存到 cache 中（理论上讲一个方法如果被调用，那么它有可能今后还会被调用），下次查找的时候效率更高。****
 ·protocols：指向该类的协议列表。
 ```
-
-
 
 5、调用一个方法的流程
 
