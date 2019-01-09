@@ -1,10 +1,6 @@
 #### runtime问题
 
-
-
 [iOS 模式详解](https://juejin.im/post/593f77085c497d006ba389f0)
-
-
 
 ##### 1、能否向编译后得到的类中增加实例变量?能否向运行时创建的类中添加实例变量?
 
@@ -20,15 +16,13 @@
 运行时创建的类是可以添加实例变量，调用 class_addIvar 函数。但是得在调用 objc_allocateClassPair 之后，objc_registerClassPair 之前，原因同上。
 ```
 
-##### 2、  _objc_msgForward函数是做什么的？直接调用它将会发生什么？
+##### 2、  _objc_msgForward函数是做什么的？直接调用它将会发生什么？
 
 ```
 _objc_msgForward是IMP类型，用于消息转发的：当向一个对象发送一条消息，但它并没有实现的时候，_objc_msgForward会尝试做消息转发
 直接调用_objc_msgForward是非常危险
 的事，这是把双刃刀，如果用不好会直接导致程序Crash，但是如果用得好，能做很多非常酷的事。
 ```
-
-
 
 ##### 3、runtime 如何实现 weak 属性
 
@@ -48,8 +42,6 @@ weak属性需要在dealloc中置nil么
 objc// 模拟下weak的setter方法，大致如下- (void)setObject:(NSObject *)object{ objc_setAssociatedObject(self, "object", object, OBJC_ASSOCIATION_ASSIGN); [object cyl_runAtDealloc:^{ _object = nil; }];}
 ```
 
-
-
 ##### 4、runtime怎么添加属性、方法等
 
 ```
@@ -64,12 +56,11 @@ class_replaceProperty
 ##### 5、 runtime如何通过selector找到对应的IMP地址？（分别考虑类方法和实例方法）
 
 > - 每一个类对象中都一个对象方法列表（对象方法缓存）
-> > - 类方法列表是存放在类对象中isa指针指向的元类对象中（类方法缓存）
-> > - 方法列表中每个方法结构体中记录着方法的名称,方法实现,以及参数类型，其实selector本质就是方法名称,通过这个方法名称就可以在方法列表中找到对应的方法实现.
-> > - 当我们发送一个消息给一个NSObject对象时，这条消息会在对象的类对象方法列表里查找
-> > - 当我们发送一个消息给一个类时，这条消息会在类的Meta Class对象的方法列表里查找*
-
-
+>   
+>   > - 类方法列表是存放在类对象中isa指针指向的元类对象中（类方法缓存）
+>   > >   > - 方法列表中每个方法结构体中记录着方法的名称,方法实现,以及参数类型，其实selector本质就是方法名称,通过这个方法名称就可以在方法列表中找到对应的方法实现.
+>   > >   > - 当我们发送一个消息给一个NSObject对象时，这条消息会在对象的类对象方法列表里查找
+>   > >   > - 当我们发送一个消息给一个类时，这条消息会在类的Meta Class对象的方法列表里查找*
 
 ##### 6、 使用runtime Associate方法关联的对象，需要在主对象dealloc的时候释放么？
 
@@ -81,15 +72,15 @@ class_replaceProperty
 * 对象正在被销毁，生命周期即将结束. 
 * 不能再有新的 __weak 弱引用，否则将指向 nil.
 * 调用 [self dealloc]
- 
+
 2、 父类调用 -dealloc 
 * 继承关系中最直接继承的父类再调用 -dealloc 
 * 如果是 MRC 代码 则会手动释放实例变量们（iVars）
 * 继承关系中每一层的父类 都再调用 -dealloc
- 
+
 3、NSObject 调 -dealloc 
 * 只做一件事：调用 Objective-C runtime 中object_dispose() 方法
- 
+
 4. 调用 object_dispose()
 * 为 C++ 的实例变量们（iVars）调用 destructors
 * 为 ARC 状态下的 实例变量们（iVars） 调用 -release 
@@ -97,8 +88,6 @@ class_replaceProperty
 * 解除所有 __weak 引用 
 * 调用 free()
 ```
-
-
 
 ##### 7、简述下Objective-C中调用方法的过程（runtime）
 
@@ -111,7 +100,7 @@ objc在向一个对象发送消息时，runtime库会根据对象的isa指针找
 补充说明：Runtime 铸就了Objective-C 是动态语言的特性，使得C语言具备了面向对象的特性，在程序运行期创建，检查，修改类、对象及其对应的方法，这些操作都可以使用runtime中的对应方法实现。
 ```
 
-##### 8、 什么是method swizzling（俗称黑魔法）
+##### 8、 什么是method swizzling（俗称黑魔法）
 
 ```
 简单说就是进行方法交换
@@ -136,7 +125,3 @@ objc在向一个对象发送消息时，runtime库会根据对象的isa指针找
 2.根据传入的方法编号SEL，里面有个哈希列表，在列表中找到对应方法Method(方法名)
 3.根据方法名(函数入口)找到函数实现，函数实现在方法区
 ```
-
-
-
-

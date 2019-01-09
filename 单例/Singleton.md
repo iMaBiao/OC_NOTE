@@ -1,11 +1,9 @@
 Singleton
 
 ```
-static Tools *_instance = nil;
-
-
 + (instancetype)shareInstance
 {
+    static Tools *_instance = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _instance = [[self alloc] init];;
