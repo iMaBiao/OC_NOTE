@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0742938B21E87FDD00D9D0EE /* OtherUsageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0742938A21E87FDD00D9D0EE /* OtherUsageController.m */; };
 		07D5C04521E721A2009EB1B1 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 07D5C04421E721A2009EB1B1 /* AppDelegate.m */; };
 		07D5C04821E721A2009EB1B1 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07D5C04721E721A2009EB1B1 /* ViewController.m */; };
 		07D5C04B21E721A2009EB1B1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 07D5C04921E721A2009EB1B1 /* Main.storyboard */; };
@@ -16,6 +17,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0742938921E87FDD00D9D0EE /* OtherUsageController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OtherUsageController.h; sourceTree = "<group>"; };
+		0742938A21E87FDD00D9D0EE /* OtherUsageController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OtherUsageController.m; sourceTree = "<group>"; };
 		07D5C04021E721A2009EB1B1 /* gcdDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = gcdDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		07D5C04321E721A2009EB1B1 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		07D5C04421E721A2009EB1B1 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -62,6 +65,8 @@
 				07D5C04421E721A2009EB1B1 /* AppDelegate.m */,
 				07D5C04621E721A2009EB1B1 /* ViewController.h */,
 				07D5C04721E721A2009EB1B1 /* ViewController.m */,
+				0742938921E87FDD00D9D0EE /* OtherUsageController.h */,
+				0742938A21E87FDD00D9D0EE /* OtherUsageController.m */,
 				07D5C04921E721A2009EB1B1 /* Main.storyboard */,
 				07D5C04C21E721A3009EB1B1 /* Assets.xcassets */,
 				07D5C04E21E721A3009EB1B1 /* LaunchScreen.storyboard */,
@@ -141,6 +146,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0742938B21E87FDD00D9D0EE /* OtherUsageController.m in Sources */,
 				07D5C04821E721A2009EB1B1 /* ViewController.m in Sources */,
 				07D5C05321E721A3009EB1B1 /* main.m in Sources */,
 				07D5C04521E721A2009EB1B1 /* AppDelegate.m in Sources */,

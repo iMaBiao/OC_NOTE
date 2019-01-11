@@ -247,20 +247,6 @@
     NSLog(@"syncConcurrent---end");
 }
 
-// 死锁
-- (void)deadlock
-{
-    dispatch_sync(dispatch_get_main_queue(), ^{
-        NSLog(@"%s 1", __FUNCTION__);
-    });
-    
-    dispatch_sync(dispatch_get_main_queue(), ^{
-        NSLog(@"%s 2", __FUNCTION__);
-    });
-    
-    dispatch_sync(dispatch_get_main_queue(), ^{
-        NSLog(@"%s 3", __FUNCTION__);
-    });
-}
+
 
 @end

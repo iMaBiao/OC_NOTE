@@ -7,6 +7,8 @@
 //
 
 #import "AppDelegate.h"
+#import "ViewController.h"
+#import "OtherUsageController.h"
 
 @interface AppDelegate ()
 
@@ -17,6 +19,20 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    self.window = [[UIWindow alloc]init];
+    self.window.frame = [UIScreen mainScreen].bounds;
+    [self.window makeKeyAndVisible];
+    
+    //gcd基本用法
+//    ViewController *vc = [[ViewController alloc]init];
+    
+//    gcd其他用法（栅栏、延迟、单次等）
+    OtherUsageController *vc = [[OtherUsageController alloc]init];
+    
+    self.window.rootViewController = vc;
+    
+    
     return YES;
 }
 
