@@ -1,6 +1,6 @@
 //
-//  GcdLockViewController.h
-//  gcdDemo
+//  GcdViewController.h
+//  ThreadDemo
 //
 //  Created by teilt on 2019/1/14.
 //  Copyright © 2019 teilt. All rights reserved.
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface GcdLockViewController : UIViewController
+@interface GcdViewController : UIViewController
 
 @end
 

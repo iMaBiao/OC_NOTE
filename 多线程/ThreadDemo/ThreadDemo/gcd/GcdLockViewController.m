@@ -1,6 +1,6 @@
 //
 //  GcdLockViewController.m
-//  gcdDemo
+//  ThreadDemo
 //
 //  Created by teilt on 2019/1/14.
 //  Copyright © 2019 teilt. All rights reserved.
@@ -9,6 +9,7 @@
 /*
  场景：总共有50张火车票，有两个售卖火车票的窗口，一个是北京火车票售卖窗口，另一个是上海火车票售卖窗口。两个窗口同时售卖火车票，卖完为止。
  */
+
 #import "GcdLockViewController.h"
 
 @interface GcdLockViewController ()
@@ -18,7 +19,6 @@
 
 //剩余票数
 @property(nonatomic ,assign) int ticketSurplusCount;
-
 @end
 
 @implementation GcdLockViewController

@@ -1,15 +1,17 @@
 //
 //  AppDelegate.m
-//  gcdDemo
+//  ThreadDemo
 //
-//  Created by teilt on 2019/1/10.
+//  Created by teilt on 2019/1/14.
 //  Copyright © 2019 teilt. All rights reserved.
 //
 
 #import "AppDelegate.h"
-#import "ViewController.h"
+
+#import "GcdViewController.h"
 #import "OtherUsageController.h"
 #import "GcdLockViewController.h"
+
 @interface AppDelegate ()
 
 @end
@@ -25,13 +27,13 @@
     [self.window makeKeyAndVisible];
     
     //gcd基本用法
-//    ViewController *vc = [[ViewController alloc]init];
+        GcdViewController *vc = [[GcdViewController alloc]init];
     
-//    gcd其他用法（栅栏、延迟、单次等）
-//    OtherUsageController *vc = [[OtherUsageController alloc]init];
+    //    gcd其他用法（栅栏、延迟、单次等）
+    //    OtherUsageController *vc = [[OtherUsageController alloc]init];
     
-//    gcd 加锁
-    GcdLockViewController *vc = [[GcdLockViewController alloc]init];
+    //    gcd 加锁
+//    GcdLockViewController *vc = [[GcdLockViewController alloc]init];
     
     
     self.window.rootViewController = vc;

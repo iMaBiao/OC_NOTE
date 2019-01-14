@@ -1,8 +1,8 @@
 //
 //  OtherUsageController.m
-//  gcdDemo
+//  ThreadDemo
 //
-//  Created by teilt on 2019/1/11.
+//  Created by teilt on 2019/1/14.
 //  Copyright © 2019 teilt. All rights reserved.
 //
 
@@ -19,29 +19,29 @@
     // Do any additional setup after loading the view.
     
     //   栅栏函数
-//    [self barrier];
+    //    [self barrier];
     
     //延迟函数
-//    [self after];
+    //    [self after];
     
-//    执行一次的函数
-//    [self once];
+    //    执行一次的函数
+    //    [self once];
     
-//    遍历函数
-//    [self apply];
+    //    遍历函数
+    //    [self apply];
     
     //队列组
     //监听
-//    [self groupNotify];
+    //    [self groupNotify];
     //等待
-//    [self groupWait];
+    //    [self groupWait];
     
-//    [self groupEnterAndLeave];
+    //    [self groupEnterAndLeave];
     
-//    线程同步
-//    [self semaphoreSync];
+    //    线程同步
+    //    [self semaphoreSync];
     
-
+    
     
 }
 
@@ -148,7 +148,7 @@
             NSLog(@" 1 --- %@",[NSThread currentThread]);
         }
     });
-
+    
     //往队列组中添加任务2
     dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         for (int i = 0; i < 2; ++i) {

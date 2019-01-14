@@ -1,8 +1,8 @@
 //
-//  OtherUsageController.h
-//  gcdDemo
+//  GcdLockViewController.h
+//  ThreadDemo
 //
-//  Created by teilt on 2019/1/11.
+//  Created by teilt on 2019/1/14.
 //  Copyright © 2019 teilt. All rights reserved.
 //
 
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface OtherUsageController : UIViewController
+@interface GcdLockViewController : UIViewController
 
 @end
 

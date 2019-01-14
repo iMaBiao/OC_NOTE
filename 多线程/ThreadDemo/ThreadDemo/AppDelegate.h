@@ -1,8 +1,8 @@
 //
 //  AppDelegate.h
-//  gcdDemo
+//  ThreadDemo
 //
-//  Created by teilt on 2019/1/10.
+//  Created by teilt on 2019/1/14.
 //  Copyright © 2019 teilt. All rights reserved.
 //
 

@@ -1,8 +1,8 @@
 //
 //  UserCenter.h
-//  gcdDemo
+//  ThreadDemo
 //
-//  Created by MaBiao on 2019/1/12.
+//  Created by teilt on 2019/1/14.
 //  Copyright © 2019 teilt. All rights reserved.
 //
 
