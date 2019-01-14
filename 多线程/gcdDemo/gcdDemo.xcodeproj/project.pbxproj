@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0742938B21E87FDD00D9D0EE /* OtherUsageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0742938A21E87FDD00D9D0EE /* OtherUsageController.m */; };
+		074D366B21EC1EBE006041BB /* GcdLockViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 074D366A21EC1EBE006041BB /* GcdLockViewController.m */; };
 		07A414F521E9FBC400090652 /* UserCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A414F421E9FBC400090652 /* UserCenter.m */; };
 		07D5C04521E721A2009EB1B1 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 07D5C04421E721A2009EB1B1 /* AppDelegate.m */; };
 		07D5C04821E721A2009EB1B1 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07D5C04721E721A2009EB1B1 /* ViewController.m */; };
@@ -20,6 +21,8 @@
 /* Begin PBXFileReference section */
 		0742938921E87FDD00D9D0EE /* OtherUsageController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OtherUsageController.h; sourceTree = "<group>"; };
 		0742938A21E87FDD00D9D0EE /* OtherUsageController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OtherUsageController.m; sourceTree = "<group>"; };
+		074D366921EC1EBE006041BB /* GcdLockViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GcdLockViewController.h; sourceTree = "<group>"; };
+		074D366A21EC1EBE006041BB /* GcdLockViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GcdLockViewController.m; sourceTree = "<group>"; };
 		07A414F321E9FBC400090652 /* UserCenter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserCenter.h; sourceTree = "<group>"; };
 		07A414F421E9FBC400090652 /* UserCenter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserCenter.m; sourceTree = "<group>"; };
 		07D5C04021E721A2009EB1B1 /* gcdDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = gcdDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -72,6 +75,8 @@
 				0742938A21E87FDD00D9D0EE /* OtherUsageController.m */,
 				07A414F321E9FBC400090652 /* UserCenter.h */,
 				07A414F421E9FBC400090652 /* UserCenter.m */,
+				074D366921EC1EBE006041BB /* GcdLockViewController.h */,
+				074D366A21EC1EBE006041BB /* GcdLockViewController.m */,
 				07D5C04921E721A2009EB1B1 /* Main.storyboard */,
 				07D5C04C21E721A3009EB1B1 /* Assets.xcassets */,
 				07D5C04E21E721A3009EB1B1 /* LaunchScreen.storyboard */,
@@ -155,6 +160,7 @@
 				07D5C04821E721A2009EB1B1 /* ViewController.m in Sources */,
 				07A414F521E9FBC400090652 /* UserCenter.m in Sources */,
 				07D5C05321E721A3009EB1B1 /* main.m in Sources */,
+				074D366B21EC1EBE006041BB /* GcdLockViewController.m in Sources */,
 				07D5C04521E721A2009EB1B1 /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

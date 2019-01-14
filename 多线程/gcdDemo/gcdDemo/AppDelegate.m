@@ -9,7 +9,7 @@
 #import "AppDelegate.h"
 #import "ViewController.h"
 #import "OtherUsageController.h"
-
+#import "GcdLockViewController.h"
 @interface AppDelegate ()
 
 @end
@@ -28,7 +28,11 @@
 //    ViewController *vc = [[ViewController alloc]init];
     
 //    gcd其他用法（栅栏、延迟、单次等）
-    OtherUsageController *vc = [[OtherUsageController alloc]init];
+//    OtherUsageController *vc = [[OtherUsageController alloc]init];
+    
+//    gcd 加锁
+    GcdLockViewController *vc = [[GcdLockViewController alloc]init];
+    
     
     self.window.rootViewController = vc;
     

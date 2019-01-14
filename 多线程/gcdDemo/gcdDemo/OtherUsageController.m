@@ -36,11 +36,40 @@
     //等待
 //    [self groupWait];
     
-    [self groupEnterAndLeave];
+//    [self groupEnterAndLeave];
+    
+//    线程同步
+//    [self semaphoreSync];
+    
+
     
 }
 
 #pragma mark - method
+//    线程同步
+- (void)semaphoreSync
+{
+    NSLog(@"currentThread---%@",[NSThread currentThread]);  // 打印当前线程
+    NSLog(@"semaphore---begin");
+    
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    
+    __block int number = 0;
+    dispatch_async(queue, ^{//开启一个异步线程
+        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作
+        NSLog(@"1---%@",[NSThread currentThread]);      // 打印当前线程
+        
+        number = 100;
+        
+        dispatch_semaphore_signal(semaphore);
+    });
+    
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+    
+    NSLog(@"semaphore---end,number = %zd",number);
+}
+
 
 - (void)groupEnterAndLeave
 {
