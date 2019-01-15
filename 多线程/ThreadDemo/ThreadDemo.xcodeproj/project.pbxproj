@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		072622E021EDBAE100F38877 /* MBOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 072622DF21EDBAE100F38877 /* MBOperation.m */; };
 		074D367A21EC795C006041BB /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 074D367921EC795C006041BB /* AppDelegate.m */; };
 		074D368021EC795C006041BB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 074D367E21EC795C006041BB /* Main.storyboard */; };
 		074D368221EC795D006041BB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 074D368121EC795D006041BB /* Assets.xcassets */; };
@@ -21,6 +22,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		072622DE21EDBAE100F38877 /* MBOperation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MBOperation.h; sourceTree = "<group>"; };
+		072622DF21EDBAE100F38877 /* MBOperation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MBOperation.m; sourceTree = "<group>"; };
 		074D367521EC795C006041BB /* ThreadDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ThreadDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		074D367821EC795C006041BB /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		074D367921EC795C006041BB /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -116,6 +119,8 @@
 			children = (
 				074D36A021EC83ED006041BB /* NSOperationViewController.h */,
 				074D36A121EC83ED006041BB /* NSOperationViewController.m */,
+				072622DE21EDBAE100F38877 /* MBOperation.h */,
+				072622DF21EDBAE100F38877 /* MBOperation.m */,
 			);
 			path = NSOperation;
 			sourceTree = "<group>";
@@ -195,6 +200,7 @@
 				074D368821EC795D006041BB /* main.m in Sources */,
 				074D367A21EC795C006041BB /* AppDelegate.m in Sources */,
 				074D369E21EC7B0A006041BB /* NSThreadViewController.m in Sources */,
+				072622E021EDBAE100F38877 /* MBOperation.m in Sources */,
 				074D369221EC79AA006041BB /* GcdViewController.m in Sources */,
 				074D369B21EC7A81006041BB /* UserCenter.m in Sources */,
 				074D36A221EC83ED006041BB /* NSOperationViewController.m in Sources */,

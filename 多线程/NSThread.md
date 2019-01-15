@@ -2,11 +2,7 @@
 
 https://juejin.im/post/5c3321cb518825260a7dc6af
 
-
-
 NSThread是对pthread的封装
-
-
 
 NSThread是轻量级的多线程开发，优点是我们可以直接实例化一个NSThread对象并直接操作这个线程对象，但是使用NSThread需要自己管理线程生命周期。iOS开发过程中，NSThread最常用到的方法就是 **NSThread currentThread**获取当前线程，其他常用属性及方法如下：
 
@@ -55,8 +51,6 @@ NSThread是轻量级的多线程开发，优点是我们可以直接实例化一
 - (void)performSelectorInBackground:(SEL)aSelector withObject:(nullable id)arg;
 ```
 
-
-
 #### 多种方式创建线程
 
 ```
@@ -76,16 +70,11 @@ NSThread是轻量级的多线程开发，优点是我们可以直接实例化一
 -(void)implicitCreateThread{
     [self performSelectorInBackground:@selector(loadImageSource:) withObject:imgUrl];
 }
-
 ```
-
-
 
 ##### 关于NSThread线程状态的说明
 
 NSThread类型的对象可以获取到线程的三种状态属性isExecuting（正在执行）、isFinished（已经完成）、isCancellled（已经撤销），其中撤销状态是可以在代码中调用线程的cancel方法手动设置的（在主线程中并不能真正停止当前线程）。isFinished属性标志着当前线程上的任务是否执行完成，cancel一个线程只是撤销当前线程上任务的执行，监测到isFinished = YES或调用cancel方法都不能代表立即退出了这个线程，而调用类方法exit方法才可立即退出当前线程。
-
-
 
 补充：
 
@@ -96,5 +85,3 @@ NSThread类型的对象可以获取到线程的三种状态属性isExecuting（�
 - NSThread可以设置对象的优先级thread.threadPriority，threadPriority取值范围是0到1；
 - NSThread并没有提供设置线程间的依赖关系的方法，也就不能单纯通过NSThread来设置任务处理的先后顺序，但是我们可以通过设置NSThread的休眠或优先级来尽量优化任务处理的先后顺序;
 - 在自己试验的工程中，虽然NSThread实例的数量理论上不受限制，但是正常的处理过程中需要控制线程的数量。
-
-

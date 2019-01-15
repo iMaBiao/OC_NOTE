@@ -379,6 +379,34 @@ asyncConcurrent---begin
 
 那么，现在的情况就是syncMain任务和任务1都在等对方执行完毕。这样大家互相等待，所以就卡住了，所以我们的任务执行不了，而且syncMain---end也没有打印。
 
+
+
+```
+补充：通常情况下，在一个线程正在执行一个串行队列sQueue上任务的过程中，再次调用dispatch_sync同步执行这个串行队列sQueue在上的任务，就会引起死锁
+
+// 同一串行线程 sync死锁
+- (void)deadLock
+{
+    NSLog(@"1");
+    dispatch_queue_t queue = dispatch_queue_create("com.ibiaoma.gcdDemo", DISPATCH_QUEUE_SERIAL);
+    dispatch_async(queue, ^{
+        NSLog(@"2");
+        dispatch_sync(queue, ^{
+            NSLog(@"3");
+        });
+    });
+    NSLog(@"4");
+}
+
+打印：
+（界面卡死）
+ThreadDemo[2042:59383] 1
+ThreadDemo[2042:59383] 4
+ThreadDemo[2042:59555] 2
+```
+
+
+
 ##### 5.2**在其他线程中调用同步执行 + 主队列**
 
 ```
