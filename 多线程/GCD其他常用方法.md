@@ -462,17 +462,17 @@ semaphore---begin
 {
     NSLog(@"currentThread---%@",[NSThread currentThread]);  // 打印当前线程
     NSLog(@"semaphore---begin");
-    
+
     self.ticketSurplusCount = 10;
-    
+
     semaphoreLock = dispatch_semaphore_create(1);
-    
+
     dispatch_queue_t queue1 = dispatch_queue_create("com.ibiaoma.gcdDemo", DISPATCH_QUEUE_SERIAL);
-    
+
     dispatch_queue_t queue2 = dispatch_queue_create("com.ibiaoma.gcdDemo", DISPATCH_QUEUE_SERIAL);
-    
+
     __weak typeof(self) weakSelf = self;
-    
+
     dispatch_async(queue1, ^{
         [weakSelf saleTicketNotSave];
     });
@@ -485,9 +485,9 @@ semaphore---begin
 - (void)saleTicketSafe
 {
     while (1) {
-        
+
         dispatch_semaphore_wait(semaphoreLock, DISPATCH_TIME_FOREVER);
-        
+
         if (self.ticketSurplusCount > 0) {
             self.ticketSurplusCount--;
             NSLog(@"%@", [NSString stringWithFormat:@"剩余票数：%d 窗口：%@", self.ticketSurplusCount, [NSThread currentThread]]);
@@ -496,7 +496,7 @@ semaphore---begin
             NSLog(@"所有火车票均已售完");
             break;
         }
-        
+
         dispatch_semaphore_signal(semaphoreLock);
     }
 }

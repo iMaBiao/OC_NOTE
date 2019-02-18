@@ -2,15 +2,9 @@
 
 [iOS 多线程：『NSOperation、NSOperationQueue』详尽总结](https://bujige.net/blog/iOS-Complete-learning-NSOperation.html)
 
-
-
-
-
 #### 1、 NSOperation、NSOperationQueue 简介
 
 NSOperation、NSOperationQueue 是苹果提供给我们的一套多线程解决方案。实际上 NSOperation、NSOperationQueue 是基于 GCD 更高一层的封装，完全面向对象。但是比 GCD 更简单易用、代码可读性也更高。
-
-
 
 **为什么要使用 NSOperation、NSOperationQueue？**
 
@@ -20,11 +14,7 @@ NSOperation、NSOperationQueue 是苹果提供给我们的一套多线程解决�
 4. 可以很方便的取消一个操作的执行。
 5. 使用 KVO 观察对操作执行状态的更改：isExecuteing、isFinished、isCancelled。
 
-
-
 NSOperation是一个抽象类，实际开发中需要使用其子类NSInvocationOperation、NSBlockOperation。首先创建一个NSOperationQueue，再建多个NSOperation实例（设置好要处理的任务、operation的属性和依赖关系等），然后再将这些operation放到这个queue中，线程就会被依次启动。
-
-
 
 #### 2. NSOperation、NSOperationQueue 操作和操作队列
 
@@ -38,8 +28,6 @@ NSOperation是一个抽象类，实际开发中需要使用其子类NSInvocation
   - 操作队列通过设置**最大并发操作数（maxConcurrentOperationCount）**来控制并发、串行。
   - NSOperationQueue 为我们提供了两种不同类型的队列：主队列和自定义队列。主队列运行在主线程之上，而自定义队列在后台执行。
 
-
-
 #### 3. NSOperation、NSOperationQueue 使用步骤
 
 NSOperation 需要配合 NSOperationQueue 来实现多线程。因为默认情况下，NSOperation 单独使用时系统同步执行操作，配合 NSOperationQueue 我们能更好的实现异步执行。
@@ -52,8 +40,6 @@ NSOperation 实现多线程的使用步骤分为三步：
 
 之后呢，系统就会自动将 NSOperationQueue 中的 NSOperation 取出来，在新线程中执行操作。
 
-
-
 #### 4. NSOperation 和 NSOperationQueue 基本使用
 
 ##### 4.1 创建操作
@@ -65,8 +51,6 @@ NSOperation 是个抽象类，不能用来封装操作。我们只有使用它�
 3. 自定义继承自 NSOperation 的子类，通过实现内部相应的方法来封装操作。
 
 在不使用 NSOperationQueue，单独使用 NSOperation 的情况下系统同步执行操作，下面我们学习以下操作的三种创建方式。
-
-
 
 ###### 4.1.1 使用子类`NSInvocationOperation`
 
@@ -82,7 +66,7 @@ NSOperation 是个抽象类，不能用来封装操作。我们只有使用它�
 {
     NSLog(@"currentThread---%@",[NSThread currentThread]);
 }
- 
+
 打印：
 currentThread---<NSThread: 0x600000075bc0>{number = 1, name = main}
 
@@ -112,8 +96,6 @@ currentThread---<NSThread: 0x600000068540>{number = 1, name = main}
 
 和上边 NSInvocationOperation 使用一样。因为代码是在主线程中调用的，所以打印结果为主线程。如果在其他线程中执行操作，则打印结果为其他线程。
 
-
-
 如果用 addExecutionBlock: 添加多个任务：
 
 ```
@@ -125,28 +107,28 @@ currentThread---<NSThread: 0x600000068540>{number = 1, name = main}
             NSLog(@"1---%@", [NSThread currentThread]); // 打印当前线程
         }
     }];
-    
+
     [blockOperation addExecutionBlock:^{
         for (int i = 0; i < 2; i++) {
             [NSThread sleepForTimeInterval:2]; // 模拟耗时操作
             NSLog(@"2---%@", [NSThread currentThread]); // 打印当前线程
         }
     }];
-    
+
     [blockOperation addExecutionBlock:^{
         for (int i = 0; i < 2; i++) {
             [NSThread sleepForTimeInterval:2]; // 模拟耗时操作
             NSLog(@"3---%@", [NSThread currentThread]); // 打印当前线程
         }
     }];
-    
+
     [blockOperation addExecutionBlock:^{
         for (int i = 0; i < 2; i++) {
             [NSThread sleepForTimeInterval:2]; // 模拟耗时操作
             NSLog(@"4---%@", [NSThread currentThread]); // 打印当前线程
         }
     }];
-    
+
     [blockOperation start];
 }
 
@@ -163,11 +145,7 @@ currentThread---<NSThread: 0x600000068540>{number = 1, name = main}
 
 可以看出：使用子类 `NSBlockOperation`，并调用方法 `AddExecutionBlock:` 的情况下，`blockOperationWithBlock:`方法中的操作 和 `addExecutionBlock:` 中的操作是在不同的线程中异步执行的。而且，这次执行结果中 `blockOperationWithBlock:`方法中的操作也不是在当前线程（主线程）中执行的。从而印证了`blockOperationWithBlock:` 中的操作也可能会在其他线程（非当前线程）中执行。
 
-
-
 一般情况下，如果一个 NSBlockOperation 对象封装了多个操作。NSBlockOperation 是否开启新线程，取决于操作的个数。如果添加的操作的个数多，就会自动开启新线程。当然开启的线程数是由系统来决定的。
-
-
 
 ###### 4.1.3 使用自定义继承自 NSOperation 的子类
 
@@ -200,18 +178,13 @@ currentThread---<NSThread: 0x600000068540>{number = 1, name = main}
 打印：
 1---<NSThread: 0x60400006d080>{number = 1, name = main}
 1---<NSThread: 0x60400006d080>{number = 1, name = main}
-
 ```
 
 - 可以看出：在没有使用 NSOperationQueue、在主线程单独使用自定义继承自 NSOperation 的子类的情况下，是在主线程执行操作，并没有开启新线程。
 
-
-
 ##### 4.2 创建队列
 
 NSOperationQueue 一共有两种队列：主队列、自定义队列。其中自定义队列同时包含了串行、并发功能。下边是主队列、自定义队列的基本创建方法和特点。
-
-
 
 主队列
 
@@ -219,8 +192,6 @@ NSOperationQueue 一共有两种队列：主队列、自定义队列。其中自
 
 // 主队列获取方法  
 NSOperationQueue *queue = [NSOperationQueue mainQueue];
-
-
 
 自定义队列（非主队列）
 
@@ -230,26 +201,22 @@ NSOperationQueue *queue = [NSOperationQueue mainQueue];
 // 自定义队列创建方法  
 NSOperationQueue *queue = [[NSOperationQueue alloc] init];
 
-
-
 ##### 4.3 将操作加入到队列中
 
 `- (void)addOperation:(NSOperation *)op;`
 
 - 需要先创建操作，再将创建好的操作加入到创建好的队列中去。
 
-
-
 ```
 - (void)addOperationToQueue
 {
 //    创建队列
     NSOperationQueue *queue = [[NSOperationQueue alloc]init];
-    
+
 //    创建操作
     NSInvocationOperation *op1 = [[NSInvocationOperation alloc]initWithTarget:self selector:@selector(task1) object:nil];
     NSInvocationOperation *op2 = [[NSInvocationOperation alloc]initWithTarget:self selector:@selector(task2) object:nil];
-    
+
     NSBlockOperation *op3 = [NSBlockOperation blockOperationWithBlock:^{
         for (int i = 0; i < 2; i++) {
             [NSThread sleepForTimeInterval:2]; // 模拟耗时操作
@@ -262,7 +229,7 @@ NSOperationQueue *queue = [[NSOperationQueue alloc] init];
             NSLog(@"4---%@", [NSThread currentThread]); // 打印当前线程
         }
     }];
-    
+
     [queue addOperation:op1];
     [queue addOperation:op2];
     [queue addOperation:op3];
@@ -281,8 +248,6 @@ NSOperationQueue *queue = [[NSOperationQueue alloc] init];
 可以看出：使用 NSOperation 子类创建操作，并使用 addOperation: 将操作加入到操作队列后能够开启新线程，进行并发执行。
 ```
 
-
-
 `- (void)addOperationWithBlock:(void (^)(void))block;`
 
 - 无需先创建操作，在 block 中添加操作，直接将包含操作的 block 加入到队列中。
@@ -291,21 +256,21 @@ NSOperationQueue *queue = [[NSOperationQueue alloc] init];
 - (void)addOperationWithBlockToQueue
 {
     NSOperationQueue *queue = [[NSOperationQueue alloc]init];
-    
+
     [queue addOperationWithBlock:^{
         for (int i = 0; i < 2; i++) {
             [NSThread sleepForTimeInterval:2]; // 模拟耗时操作
             NSLog(@"1---%@", [NSThread currentThread]); // 打印当前线程
         }
     }];
-    
+
     [queue addOperationWithBlock:^{
         for (int i = 0; i < 2; i++) {
             [NSThread sleepForTimeInterval:2]; // 模拟耗时操作
             NSLog(@"2---%@", [NSThread currentThread]); // 打印当前线程
         }
     }];
-    
+
     [queue addOperationWithBlock:^{
         for (int i = 0; i < 2; i++) {
             [NSThread sleepForTimeInterval:2]; // 模拟耗时操作
@@ -325,15 +290,11 @@ NSOperationQueue *queue = [[NSOperationQueue alloc] init];
 可以看出：使用 addOperationWithBlock: 将操作加入到操作队列后能够开启新线程，进行并发执行。
 ```
 
-
-
 #### 5. NSOperationQueue 控制串行执行、并发执行
 
 这里有个关键属性`maxConcurrentOperationCount`，叫做**最大并发操作数**。用来控制一个特定队列中可以有多少个操作同时参与并发执行。
 
 注意：这里`maxConcurrentOperationCount`控制的不是并发线程的数量，而是一个队列中同时能并发执行的最大操作数。而且一个操作也并非只能在一个线程中运行。
-
-
 
 最大并发操作数：`maxConcurrentOperationCount`
 
@@ -342,28 +303,28 @@ NSOperationQueue *queue = [[NSOperationQueue alloc] init];
 - `maxConcurrentOperationCount`大于1时，队列为并发队列。操作并发执行，当然这个值不应超过系统限制，即使自己设置一个很大的值，系统也会自动调整为 min{自己设定的值，系统设定的默认最大值}。
 
 ```
-    NSOperationQueue *queue = [[NSOperationQueue alloc]init];
-    
+    NSOperationQueue *queue = [[NSOperationQueue alloc]init];
+
     // 设置最大并发操作数
     queue.maxConcurrentOperationCount = 1; // 串行队列
     // queue.maxConcurrentOperationCount = 2; // 并发队列
     // queue.maxConcurrentOperationCount = 8; // 并发队列
-    
-    
+
+
     [queue addOperationWithBlock:^{
         for (int i = 0; i < 2; i++) {
             [NSThread sleepForTimeInterval:2]; // 模拟耗时操作
             NSLog(@"1---%@", [NSThread currentThread]); // 打印当前线程
         }
     }];
-    
+
     [queue addOperationWithBlock:^{
         for (int i = 0; i < 2; i++) {
             [NSThread sleepForTimeInterval:2]; // 模拟耗时操作
             NSLog(@"2---%@", [NSThread currentThread]); // 打印当前线程
         }
     }];
-    
+
     [queue addOperationWithBlock:^{
         for (int i = 0; i < 2; i++) {
             [NSThread sleepForTimeInterval:2]; // 模拟耗时操作
@@ -402,9 +363,7 @@ queue.maxConcurrentOperationCount = 8;
 
 - 可以看出：当最大并发操作数为1时，操作是按顺序串行执行的，并且一个操作完成之后，下一个操作才开始执行。当最大操作并发数为2时，操作是并发执行的，可以同时执行两个操作。而开启线程数量是由系统决定的，不需要我们来管理。
 
-
-
-#### 6、 NSOperation中的依赖
+#### 6、 NSOperation中的依赖
 
 NSOperation、NSOperationQueue 最吸引人的地方是它能添加操作之间的依赖关系。通过操作依赖，我们可以很方便的控制操作之间的执行先后顺序。NSOperation 提供了3个接口供我们管理和查看依赖。
 
@@ -412,30 +371,28 @@ NSOperation、NSOperationQueue 最吸引人的地方是它能添加操作之间�
 - `- (void)removeDependency:(NSOperation *)op;`移除依赖，取消当前操作对操作 op 的依赖。
 - `@property (readonly, copy) NSArray<NSOperation *> *dependencies;`在当前操作开始执行之前完成执行的所有操作对象数组。
 
-
-
 ```
 - (void)addDependency
 {
     NSOperationQueue *queue = [[NSOperationQueue alloc]init];
-    
+
     NSBlockOperation *op1 = [NSBlockOperation blockOperationWithBlock:^{
         for (int i = 0; i < 2; i++) {
             [NSThread sleepForTimeInterval:2]; // 模拟耗时操作
             NSLog(@"1---%@", [NSThread currentThread]); // 打印当前线程
         }
     }];
-    
+
     NSBlockOperation *op2 = [NSBlockOperation blockOperationWithBlock:^{
         for (int i = 0; i < 2; i++) {
             [NSThread sleepForTimeInterval:2]; // 模拟耗时操作
             NSLog(@"2---%@", [NSThread currentThread]); // 打印当前线程
         }
     }];
-    
+
     // 让op2 依赖于 op1，则先执行op1，在执行op2
     [op2 addDependency:op1];
-    
+
     [queue addOperation:op1];
     [queue addOperation:op2];
 }
@@ -448,8 +405,6 @@ NSOperation、NSOperationQueue 最吸引人的地方是它能添加操作之间�
 
 可以看到：通过添加操作依赖，无论运行几次，其结果都是 op1 先执行，op2 后执行。
 ```
-
-
 
 #### 7. NSOperation 优先级
 
@@ -480,10 +435,6 @@ typedef NS_ENUM(NSInteger, NSOperationQueuePriority) {
 - `queuePriority`属性决定了**进入准备就绪状态下的操作**之间的开始执行顺序。并且，优先级不能取代依赖关系。
 - 如果一个队列中既包含高优先级操作，又包含低优先级操作，并且两个操作都已经准备就绪，那么队列先执行高优先级操作。比如上例中，如果 op1 和 op4 是不同优先级的操作，那么就会先执行优先级高的操作。
 - 如果，一个队列中既包含了准备就绪状态的操作，又包含了未准备就绪的操作，未准备就绪的操作优先级比准备就绪的操作优先级高。那么，虽然准备就绪的操作优先级低，也会优先执行。优先级不能取代依赖关系。如果要控制操作间的启动顺序，则必须使用依赖关系。
-
-
-
-
 
 补充：
 
