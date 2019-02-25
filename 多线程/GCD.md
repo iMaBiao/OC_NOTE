@@ -174,7 +174,7 @@ syncConcurrent---end
     NSLog(@"asyncConcurrent---begin");
 
     //    创建一个并发队列
-    dispatch_queue_t queue = dispatch_queue_create("com.ibiaoma.gcdDemo", DISPATCH_QUEUE_SERIAL);
+    dispatch_queue_t queue = dispatch_queue_create("com.ibiaoma.gcdDemo", DISPATCH_QUEUE_CONCURRENT);
 
     // 创建异步线程1
     dispatch_async(queue, ^{
@@ -204,15 +204,15 @@ syncConcurrent---end
 }
 
 打印
-currentThread---<NSThread: 0x604000079000>{number = 1, name = main}
+currentThread---<NSThread: 0x6000000703c0>{number = 1, name = main}
 asyncConcurrent---begin
 syncConcurrent---end
-1 --- <NSThread: 0x604000278f80>{number = 3, name = (null)}
-1 --- <NSThread: 0x604000278f80>{number = 3, name = (null)}
-2 --- <NSThread: 0x604000278f80>{number = 3, name = (null)}
-2 --- <NSThread: 0x604000278f80>{number = 3, name = (null)}
-3 --- <NSThread: 0x604000278f80>{number = 3, name = (null)}
-3 --- <NSThread: 0x604000278f80>{number = 3, name = (null)}
+ 3 --- <NSThread: 0x604000270300>{number = 5, name = (null)}
+ 2 --- <NSThread: 0x60000027f080>{number = 4, name = (null)}
+1 --- <NSThread: 0x604000270700>{number = 3, name = (null)}
+1 --- <NSThread: 0x604000270700>{number = 3, name = (null)}
+ 2 --- <NSThread: 0x60000027f080>{number = 4, name = (null)}
+ 3 --- <NSThread: 0x604000270300>{number = 5, name = (null)}
 ```
 
 在异步执行 + 并发队列中可以看出：
@@ -379,8 +379,6 @@ asyncConcurrent---begin
 
 那么，现在的情况就是syncMain任务和任务1都在等对方执行完毕。这样大家互相等待，所以就卡住了，所以我们的任务执行不了，而且syncMain---end也没有打印。
 
-
-
 ```
 补充：通常情况下，在一个线程正在执行一个串行队列sQueue上任务的过程中，再次调用dispatch_sync同步执行这个串行队列sQueue在上的任务，就会引起死锁
 
@@ -404,8 +402,6 @@ ThreadDemo[2042:59383] 1
 ThreadDemo[2042:59383] 4
 ThreadDemo[2042:59555] 2
 ```
-
-
 
 ##### 5.2**在其他线程中调用同步执行 + 主队列**
 

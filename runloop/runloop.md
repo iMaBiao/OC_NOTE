@@ -6,13 +6,9 @@ https://juejin.im/post/5c36e369f265da61682b92bb
 
 [ iOS 多线程：『RunLoop』详尽总结](https://bujige.net/blog/iOS-Complete-learning-RunLoop.html)
 
-
-
 #### 1. RunLoop简介
 
 RunLoop实际上是一个对象，这个对象在循环中用来处理程序运行过程中出现的各种事件（比如说触摸事件、UI刷新事件、定时器事件、Selector事件），从而保持程序的持续运行；而且在没有事件处理的时候，会进入睡眠模式，从而节省CPU资源，提高程序性能。
-
-
 
 ##### 1.1 RunLoop和线程
 
@@ -22,8 +18,6 @@ RunLoop和线程是息息相关的，我们知道线程的作用是用来执行�
 2. 我们只能在当前线程中操作当前线程的RunLoop，而不能去操作其他线程的RunLoop。
 3. RunLoop对象在第一次获取RunLoop时创建，销毁则是在线程结束的时候。
 4. 主线程的RunLoop对象系统自动帮助我们创建好了(原理如下)，而子线程的RunLoop对象需要我们主动创建。
-
-
 
 ##### 1.2 默认情况下主线程的RunLoop原理
 
@@ -53,15 +47,11 @@ int main(int argc, char * argv[]) {
 
 从上边可看出，程序一直在do-while循环中执行，所以UIApplicationMain函数一直没有返回，我们在运行程序之后程序不会马上退出，会保持持续运行状态。
 
-
-
 下图是苹果官方给出的RunLoop模型图
 
 ![](runloop1.png)
 
 从上图中可以看出，RunLoop就是线程中的一个循环，RunLoop在循环中会不断检测，通过Input sources（输入源）和Timer sources（定时源）两种来源等待接受事件；然后对接受到的事件通知线程进行处理，并在没有事件的时候进行休息。
-
-
 
 #### 2. RunLoop相关类
 
@@ -72,8 +62,6 @@ int main(int argc, char * argv[]) {
 3. CFRunLoopSourceRef：就是RunLoop模型图中提到的输入源/事件源
 4. CFRunLoopTimerRef：就是RunLoop模型图中提到的定时源
 5. CFRunLoopObserverRef：观察者，能够监听RunLoop的状态改变
-
-
 
 ![](runloop2.png) 一个RunLoop对象（CFRunLoopRef）中包含若干个运行模式（CFRunLoopModeRef）。而每一个运行模式下又包含若干个输入源（CFRunLoopSourceRef）、定时源（CFRunLoopTimerRef）、观察者（CFRunLoopObserverRef）。
 
@@ -120,10 +108,10 @@ CFRunLoopTimerRef是定时源（RunLoop模型图中提到过），理解为基�
 - (void)showDemo1
 {
     NSTimer *timer = [NSTimer timerWithTimeInterval:2.0 target:self selector:@selector(run) userInfo:nil repeats:YES];
-    
+
 // 将定时器添加到当前RunLoop的NSDefaultRunLoopMode下,一旦RunLoop进入其他模式，定时器timer就不工作了
     [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSDefaultRunLoopMode];
-    
+
 // 将定时器添加到当前RunLoop的UITrackingRunLoopMode下，只在拖动情况下工作
 //    [[NSRunLoop currentRunLoop] addTimer:timer forMode:UITrackingRunLoopMode];
 // 将定时器添加到当前RunLoop的NSRunLoopCommonModes下，定时器就会跑在被标记为Common Modes的模式下
@@ -166,8 +154,6 @@ CFRunLoopSourceRef是事件源（RunLoop模型图中提到过），CFRunLoopSour
 
 这两种分类方式其实没有区别，只不过第一种是通过官方理论来分类，第二种是在实际应用中通过调用函数来分类。
 
-
-
 ##### 2.5 CFRunLoopObserverRef
 
 CFRunLoopObserverRef是观察者，用来监听RunLoop的状态改变
@@ -186,8 +172,6 @@ typedef CF_OPTIONS(CFOptionFlags, CFRunLoopActivity) {
 };
 ```
 
-
-
 ```
 //用来展示CFRunLoopObserverRef使用
 - (void)showDemo2
@@ -196,10 +180,10 @@ typedef CF_OPTIONS(CFOptionFlags, CFRunLoopActivity) {
     CFRunLoopObserverRef observer = CFRunLoopObserverCreateWithHandler(CFAllocatorGetDefault(), kCFRunLoopAllActivities, YES, 0, ^(CFRunLoopObserverRef observer, CFRunLoopActivity activity) {
         NSLog(@"监听到RunLoop发生改变---%zd",activity);
     });
-    
+
     // 添加观察者到当前RunLoop中
     CFRunLoopAddObserver(CFRunLoopGetCurrent(), observer, kCFRunLoopDefaultMode);
-    
+
     // 释放observer
     CFRelease(observer);
 }
@@ -221,15 +205,11 @@ RunLoopDemo[2661:135034] 监听到RunLoop发生改变---64
 
 可以看到RunLoop的状态在不断的改变，最终变成了状态 32，也就是即将进入睡眠状态，说明RunLoop之后就会进入睡眠状态。
 
-
-
 #### 3. RunLoop原理
 
 好了，五个类都讲解完了，下边开始放大招了。这下我们就可以来理解RunLoop的运行逻辑了。
 
 ![](runloop3.png)
-
-
 
 在每次运行开启RunLoop的时候，所在线程的RunLoop会自动处理之前未处理的事件，并且通知相关的观察者。
 
@@ -253,8 +233,6 @@ RunLoopDemo[2661:135034] 监听到RunLoop发生改变---64
    - 如果RunLoop被显示唤醒而且时间还没超时，重启RunLoop。进入步骤2
 10. 通知观察者RunLoop结束。
 
-
-
 ### 4. 后台常驻线程（很常用）
 
 我们在开发应用程序的过程中，如果后台操作特别频繁，经常会在子线程做一些耗时操作（下载文件、后台播放音乐等），我们最好能让这条线程永远常驻内存。
@@ -277,7 +255,7 @@ RunLoopDemo[2661:135034] 监听到RunLoop发生改变---64
     NSLog(@"run1---%@",[NSThread currentThread]);
     [[NSRunLoop currentRunLoop]addPort:[NSPort port] forMode:NSDefaultRunLoopMode];
     [[NSRunLoop currentRunLoop] run];
-    
+
     // 测试是否开启了RunLoop，如果开启RunLoop，则来不了这里，因为RunLoop开启了循环。
     NSLog(@"-------------");
 }

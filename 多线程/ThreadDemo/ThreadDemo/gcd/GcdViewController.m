@@ -23,13 +23,13 @@
     //    [self syncConcurrent];
     
     //    异步 、并发
-    //    [self asyncConcurrent];
+        [self asyncConcurrent];
     
     //    同步、 串行
     //    [self syncSerial];
     
     //    异步、串行
-    //    [self asyncSerial];
+//        [self asyncSerial];
     
     //    同步、主队列（死锁）
     //    [self syncMain];
@@ -42,7 +42,7 @@
     // 使用 NSThread 的 detachNewThreadSelector 方法会创建线程，并自动启动线程执行selector 任务
     //    [NSThread detachNewThreadSelector:@selector(syncMain) toTarget:self withObject:nil];
     
-    [self deadLock];
+//    [self deadLock];
 }
 
 
@@ -198,7 +198,7 @@
     NSLog(@"asyncConcurrent---begin");
     
     //    创建一个并发队列
-    dispatch_queue_t queue = dispatch_queue_create("com.ibiaoma.gcdDemo", DISPATCH_QUEUE_SERIAL);
+    dispatch_queue_t queue = dispatch_queue_create("com.ibiaoma.gcdDemo", DISPATCH_QUEUE_CONCURRENT);
     
     // 创建异步线程1
     dispatch_async(queue, ^{
