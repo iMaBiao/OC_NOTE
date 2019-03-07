@@ -143,7 +143,7 @@ apply---end
 
 - 调用队列组的dispatch_group_notify回到指定线程执行任务。或者使用dispatch_group_wait回到当前线程继续向下执行（会阻塞当前线程）。
 
-###### 5.1**dispatch_group_notify**
+##### 5.1**dispatch_group_notify**
 
 监听 group 中任务的完成状态，当所有的任务都执行完成后，追加任务到 group 中，并执行任务。
 
@@ -198,7 +198,7 @@ group---end
 
 当所有任务都执行完成之后，才执行dispatch_group_notify block中的任务。
 
-###### 5.2、 dispatch_group_wait
+##### 5.2、 dispatch_group_wait
 
 暂停当前线程（阻塞当前线程），等待指定的 group 中的任务执行完成后，才会往下继续执行。
 
@@ -243,7 +243,7 @@ group---end
 
 当所有任务执行完成之后，才执行dispatch_group_wait之后的操作。但是，使用dispatch_group_wait会阻塞当前线程。
 
-###### 5.3、 dispatch_group_enter、dispatch_group_leave
+##### 5.3、 dispatch_group_enter、dispatch_group_leave
 
 - dispatch_group_enter标志着一个任务追加到 group，执行一次，相当于 group 中未执行完毕任务数+1
 
@@ -320,7 +320,7 @@ Dispatch Semaphore 在实际开发中主要用于：
 
 - 保证线程安全，为线程加锁
 
-###### **6.1 Dispatch Semaphore 线程同步**
+##### **6.1 Dispatch Semaphore 线程同步**
 
 我们在开发中，会遇到这样的需求：异步执行耗时任务，并使用异步执行的结果进行一些额外的操作。换句话说，相当于，将将异步执行任务转换为同步执行任务。
 
@@ -328,7 +328,8 @@ Dispatch Semaphore 在实际开发中主要用于：
 比如说：AFNetworking 中 AFURLSessionManager.m 里面的 tasksForKeyPath: 方法。通过引入信号量的方式，等待异步执行任务结果，获取到 tasks，然后再返回该 tasks。
 - (NSArray *)tasksForKeyPath:(NSString *)keyPath {
     __block NSArray *tasks = nil;
-
+    
+    //创建一个Semaphore并初始化信号的总量
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
 
     [self.session getTasksWithCompletionHandler:^(NSArray *dataTasks, NSArray *uploadTasks, NSArray *downloadTasks) {
@@ -341,10 +342,11 @@ Dispatch Semaphore 在实际开发中主要用于：
         } else if ([keyPath isEqualToString:NSStringFromSelector(@selector(tasks))]) {
             tasks = [@[dataTasks, uploadTasks, downloadTasks] valueForKeyPath:@"@unionOfArrays.self"];
         }
-
+        //发送一个信号，让信号总量加1
         dispatch_semaphore_signal(semaphore);
     }];
-
+    
+    //可以使总信号量减1
     dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
 
     return tasks;
@@ -353,12 +355,14 @@ Dispatch Semaphore 在实际开发中主要用于：
 
 ```
 利用 Dispatch Semaphore 实现线程同步，将异步执行任务转换为同步执行任务。
+
 - (void)semaphoreSync
 {
     NSLog(@"currentThread---%@",[NSThread currentThread]);  // 打印当前线程
     NSLog(@"semaphore---begin");
 
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
 
     __block int number = 0;
@@ -387,7 +391,7 @@ semaphore---end,number = 100
 
 - semaphore---end是在执行完  number = 100; 之后才打印的。而且输出结果 number 为 100。这是因为异步执行不会做任何等待，可以继续执行任务。异步执行将任务1追加到队列之后，不做等待，接着执行dispatch_semaphore_wait方法。此时 semaphore == 0，当前线程进入等待状态。然后，异步任务1开始执行。任务1执行到dispatch_semaphore_signal之后，总信号量，此时 semaphore == 1，dispatch_semaphore_wait方法使总信号量减1，正在被阻塞的线程（主线程）恢复继续执行。最后打印semaphore---end,number = 100。这样就实现了线程同步，将异步执行任务转换为同步执行任务。
 
-###### **6.2 Dispatch Semaphore 线程安全和线程同步（为线程加锁）**
+##### **6.2 Dispatch Semaphore 线程安全和线程同步（为线程加锁）**
 
 **线程安全**：如果你的代码所在的进程中有多个线程在同时运行，而这些线程可能会同时运行这段代码。如果每次运行结果和单线程运行的结果是一样的，而且其他的变量的值也和预期的是一样的，就是线程安全的。
 
@@ -519,4 +523,4 @@ semaphore---begin
 所有火车票均已售完
 ```
 
-可以看出，在考虑了线程安全的情况下，使用 dispatch_semaphore 机制之后，得到的票数是正确的，没有出现混乱的情况。我们也就解决了多个线程同步的问题。
+可以看出，在考虑了线程安全的情况下，使用 dispatch_semaphore 机制之后，得到的票数是正确的，没有出现混乱的情况。我们也就解决了多个线程同步的问题。   

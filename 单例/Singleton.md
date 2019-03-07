@@ -3,7 +3,7 @@ Singleton
 ```
 + (instancetype)shareInstance
 {
-    static Tools *_instance = nil;
+    static Tools *_instance = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _instance = [[self alloc] init];;
@@ -26,3 +26,7 @@ Singleton
 }
 @end
 ```
+
+
+
+在程序中，一个单例类在程序中只能初始化一次，为了保证在使用中始终都是存在的，所以单例是在存储器的`全局区域`，在编译时分配内存，只要程序还在运行就会一直占用内存，在APP结束后由系统释放这部分内存内存。

@@ -1,11 +1,5 @@
 #### OC与JS交互
 
-
-
-
-
-
-
 1、创建WKWebView
 
 ```
@@ -23,27 +17,27 @@
         // 在iOS上默认为NO，表示是否允许不经过用户交互由javaScript自动打开窗口
         preference.javaScriptCanOpenWindowsAutomatically = YES;
         config.preferences = preference;
-        
+
          // 是使用h5的视频播放器在线播放, 还是使用原生播放器全屏播放
         config.allowsInlineMediaPlayback = YES;
          //设置视频是否需要用户手动播放  设置为NO则会允许自动播放
         config.requiresUserActionForMediaPlayback = YES;
         //设置是否允许画中画技术 在特定设备上有效
         config.allowsPictureInPictureMediaPlayback = YES;
-        
+
         //自定义的WKScriptMessageHandler 是为了解决内存不释放的问题
         WeakWebViewScriptMessageDelegate *weakScriptMessageDelegate = [[WeakWebViewScriptMessageDelegate alloc]initWithDelegate:self];
-        
+
         //这个类主要用来做native与JavaScript的交互管理
         WKUserContentController *wkUserController = [[WKUserContentController alloc]init];
         [wkUserController addScriptMessageHandler:weakScriptMessageDelegate name:@"jsToOcNoPrams"];
         [wkUserController addScriptMessageHandler:weakScriptMessageDelegate name:@"jsToOcWithPrams"];
         config.userContentController = wkUserController;
-        
+
         //用于进行JavaScript注入
         WKUserScript *wkUserScript = [[WKUserScript alloc]initWithSource:@"" injectionTime:WKUserScriptInjectionTimeAtDocumentEnd forMainFrameOnly:YES];
         [config.userContentController addUserScript:wkUserScript];
-        
+
         _webView = [[WKWebView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) configuration:config];
         // UI代理
         _webView.UIDelegate = self;
@@ -51,16 +45,16 @@
         _webView.navigationDelegate = self;
         // 是否允许手势左滑返回上一级, 类似导航控制的左滑返回
         _webView.allowsBackForwardNavigationGestures = YES;
-        
+
         //可返回的页面列表, 存储已打开过的网页
         WKBackForwardList *backForwardList = [_webView backForwardList];
-        
+
 #warning 第一次需要在url中获取cookie
         //如果加载时url且第一次需要在url中获取cookie
         //NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://www.chinadaily.com.cn"]];
         //[request addValue:[self readCurrentCookieWithDomain:@"http://www.chinadaily.com.cn"] forHTTPHeaderField:@"Cookie"];
         //[_webView loadRequest:request];
-        
+
         //加载本地html
         NSString *path = [[NSBundle mainBundle]pathForResource:@"index.html" ofType:nil];
         NSString *htmlString = [[NSString alloc]initWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
@@ -69,8 +63,6 @@
     return _webView;
 }
 ```
-
-
 
 2、OC调用JS
 
@@ -83,7 +75,7 @@
     [_webView evaluateJavaScript:jsString completionHandler:^(id _Nullable data, NSError * _Nullable error) {
        NSLog(@"%s 改变HTML的背景色", __FUNCTION__);
     }];
-    
+
     //改变字体大小 调用原生JS方法
     NSString *jsFont = [NSString stringWithFormat:@"document.getElementsByTagName('body')[0].style.webkitTextSizeAdjust = '%d%%'",arc4random()%99 + 100];
     [_webView evaluateJavaScript:jsFont completionHandler:^(id _Nullable data, NSError * _Nullable error) {
@@ -160,15 +152,11 @@
 }
 ```
 
-
-
 5、cookie
 
 https://www.jianshu.com/p/4fa8c4eb1316
 
 以前UIWebView会自动去NSHTTPCookieStorage中读取cookie，但是WKWebView并不会去读取,因此导致cookie丢失以及一系列问题，解决方式就是在request中手动帮其添加上。
-
-
 
 ```
 mainWebView.UIDelegate = self;
@@ -229,16 +217,6 @@ document.cookie=name+'='+value+';expires='+oDate+';path=/'\
 
 }
 ```
-
-
-
-
-
-
-
-
-
-
 
 跨域问题
 
