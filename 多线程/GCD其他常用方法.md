@@ -328,8 +328,8 @@ Dispatch Semaphore 在实际开发中主要用于：
 比如说：AFNetworking 中 AFURLSessionManager.m 里面的 tasksForKeyPath: 方法。通过引入信号量的方式，等待异步执行任务结果，获取到 tasks，然后再返回该 tasks。
 - (NSArray *)tasksForKeyPath:(NSString *)keyPath {
     __block NSArray *tasks = nil;
-    
-    //创建一个Semaphore并初始化信号的总量
+
+    //创建一个Semaphore并初始化信号的总量
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
 
     [self.session getTasksWithCompletionHandler:^(NSArray *dataTasks, NSArray *uploadTasks, NSArray *downloadTasks) {
@@ -342,11 +342,11 @@ Dispatch Semaphore 在实际开发中主要用于：
         } else if ([keyPath isEqualToString:NSStringFromSelector(@selector(tasks))]) {
             tasks = [@[dataTasks, uploadTasks, downloadTasks] valueForKeyPath:@"@unionOfArrays.self"];
         }
-        //发送一个信号，让信号总量加1
+        //发送一个信号，让信号总量加1
         dispatch_semaphore_signal(semaphore);
     }];
-    
-    //可以使总信号量减1
+
+    //可以使总信号量减1
     dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
 
     return tasks;
