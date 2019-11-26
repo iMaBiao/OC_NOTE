@@ -20,7 +20,6 @@
     // Do any additional setup after loading the view.
     
     Person *p = [[Person alloc]init];
-    
     p.tall = NO;
     p.rich = YES;
     p.handsome = NO;

@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface Person : NSObject
 /**
- 最普通写法
+ 普通写法
  @property(nonatomic ,assign)BOOL tall;
  @property(nonatomic ,assign)BOOL rich;
  @property(nonatomic ,assign)BOOL handsome;
