@@ -1,5 +1,9 @@
 ##### GCD
 
+
+
+[https://bujige.net/blog/iOS-Complete-learning-GCD.html](https://bujige.net/blog/iOS-Complete-learning-GCD.html)
+
 http://www.cocoachina.com/ios/20170707/19769.html
 
 https://www.jianshu.com/p/2d57c72016c6
@@ -70,7 +74,7 @@ dispatch_queue_t queue = dispatch_queue_create("com.ibiaoma.gcdDemo", DISPATCH_Q
 - 所有放在主队列中的任务，都会放到主线程中执行。
 
 - 可使用dispatch_get_main_queue()获得主队列。
-
+  
   ```
   // 主队列的获取方法
   dispatch_queue_t queue = dispatch_get_main_queue();
