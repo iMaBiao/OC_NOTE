@@ -1,7 +1,5 @@
 ##### GCD其他用法
 
-
-
 ##### 6.1 GCD 栅栏方法：dispatch_barrier_async
 
 我们有时需要异步执行两组操作，而且第一组操作执行完之后，才能开始执行第二组操作。
@@ -10,15 +8,13 @@
 
 `dispatch_barrier_async` 方法会等待前边追加到并发队列中的任务全部执行完毕之后，再将指定的任务追加到该异步队列中。然后在 `dispatch_barrier_async` 方法追加的任务执行完毕之后，异步队列才恢复为一般动作，接着追加任务到该异步队列并开始执行。具体如下图所示：
 
-
-
 ```
 /**
  * 栅栏方法 dispatch_barrier_async
  */
 - (void)barrier {
     dispatch_queue_t queue = dispatch_queue_create("net.bujige.testQueue", DISPATCH_QUEUE_CONCURRENT);
-    
+
     dispatch_async(queue, ^{
         // 追加任务 1
         [NSThread sleepForTimeInterval:2]; // 模拟耗时操作
@@ -29,13 +25,13 @@
         [NSThread sleepForTimeInterval:2];  // 模拟耗时操作
         NSLog(@"2---%@",[NSThread currentThread]); //打印当前线程
     });
-    
+
     dispatch_barrier_async(queue, ^{
         // 追加任务 barrier
         [NSThread sleepForTimeInterval:2];  // 模拟耗时操作
         NSLog(@"barrier---%@",[NSThread currentThread]);//打印当线程
     });
-    
+
     dispatch_async(queue, ^{
         // 追加任务 3
         [NSThread sleepForTimeInterval:2];// 模拟耗时操作
@@ -92,8 +88,6 @@ dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), 
 
 `dispatch_apply` 按照指定的次数将指定的任务追加到指定的队列中，并等待全部队列执行结束。
 
-
-
 如果是在串行队列中使用  `dispatch_apply`，那么就和 for 循环一样，按顺序同步执行。但是这样就体现不出快速迭代的意义了。
 
 我们可以利用并发队列进行异步执行。比如说遍历 0~5 这 6 个数字，for 循环的做法是每次取出一个元素，逐个遍历。`dispatch_apply`  可以 在多个线程中同时（异步）遍历多个数字。
@@ -103,7 +97,7 @@ dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), 
 ```
 - (void)apply {
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    
+
     NSLog(@"apply---begin");
     dispatch_apply(6, queue, ^(size_t index) {
         NSLog(@"%zd---%@",index, [NSThread currentThread]);
@@ -129,8 +123,7 @@ dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), 
 有时候我们会有这样的需求：分别异步执行2个耗时任务，然后当2个耗时任务都执行完毕后再回到主线程执行任务。这时候我们可以用到 GCD 的队列组。
 
 - 调用队列组的  `dispatch_group_async`  先把任务放到队列中，然后将队列放入队列组中。或者使用队列组的  `dispatch_group_enter`、`dispatch_group_leave`  组合来实现  `dispatch_group_async`。
-  
-  
+
 - 调用队列组的  `dispatch_group_notify`  回到指定线程执行任务。或者使用  `dispatch_group_wait`  回到当前线程继续向下执行（会阻塞当前线程）。
 
 ##### 
@@ -143,21 +136,21 @@ dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), 
 - (void)groupNotify {
     NSLog(@"currentThread---%@",[NSThread currentThread]);  
     NSLog(@"group---begin");
-    
+
     dispatch_group_t group =  dispatch_group_create();
-    
+
     dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         // 追加任务 1
         [NSThread sleepForTimeInterval:2];  // 模拟耗时操作
         NSLog(@"1---%@",[NSThread currentThread]); // 打印当前线程
     });
-    
+
     dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         // 追加任务 2
         [NSThread sleepForTimeInterval:2];  // 模拟耗时操作
         NSLog(@"2---%@",[NSThread currentThread]); // 打印当前线程
     });
-    
+
     dispatch_group_notify(group, dispatch_get_main_queue(), ^{
         // 等前面的异步任务 1、任务 2 都执行完毕后，回到主线程执行下边任务
         [NSThread sleepForTimeInterval:2]; // 模拟耗时操作
@@ -187,26 +180,26 @@ dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), 
 - (void)groupWait {
     NSLog(@"currentThread---%@",[NSThread currentThread]); 
     NSLog(@"group---begin");
-    
+
     dispatch_group_t group =  dispatch_group_create();
-    
+
     dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         // 追加任务 1
         [NSThread sleepForTimeInterval:2];  // 模拟耗时操作
         NSLog(@"1---%@",[NSThread currentThread]); // 打印当前线程
     });
-    
+
     dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         // 追加任务 2
         [NSThread sleepForTimeInterval:2];  // 模拟耗时操作
         NSLog(@"2---%@",[NSThread currentThread]); // 打印当前线程
     });
-    
+
     // 等待上面的任务全部完成后，会往下继续执行（会阻塞当前线程）
     dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
-    
+
     NSLog(@"group---end");
-    
+
 }
 
 打印：
@@ -230,7 +223,7 @@ dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), 
 - (void)groupEnterAndLeave {
     NSLog(@"currentThread---%@",[NSThread currentThread]);  
     NSLog(@"group---begin");
-    
+
     dispatch_group_t group = dispatch_group_create();
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_group_enter(group);
@@ -241,21 +234,21 @@ dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), 
 
         dispatch_group_leave(group);
     });
-    
+
     dispatch_group_enter(group);
     dispatch_async(queue, ^{
         // 追加任务 2
         [NSThread sleepForTimeInterval:2]; // 模拟耗时操作
         NSLog(@"2---%@",[NSThread currentThread]);// 打印当前线程
-        
+
         dispatch_group_leave(group);
     });
-    
+
     dispatch_group_notify(group, dispatch_get_main_queue(), ^{
         // 等前面的异步操作都执行完毕后，回到主线程.
         [NSThread sleepForTimeInterval:2];   // 模拟耗时操作
         NSLog(@"3---%@",[NSThread currentThread]);// 打印当前线程
-    
+
         NSLog(@"group---end");
     });
 }
@@ -284,8 +277,6 @@ GCD 中的信号量是指 **Dispatch Semaphore**，是持有计数的信号。
 - `dispatch_semaphore_wait`：可以使总信号量减 1，信号总量小于 0 时就会一直等待（阻塞所在线程），否则就可以正常执行。
 
 注意：信号量的使用前提是：想清楚你需要处理哪个线程等待（阻塞），又要哪个线程继续执行，然后使用信号量。
-
-
 
 Dispatch Semaphore 在实际开发中主要用于：
 
