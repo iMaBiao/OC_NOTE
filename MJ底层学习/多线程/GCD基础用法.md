@@ -11,8 +11,6 @@
 **5. GCD 线程间的通信**  
 **6. GCD 的其他方法**（栅栏方法：dispatch_barrier_async、延时执行方法：dispatch_after、一次性代码（只执行一次）：dispatch_once、快速迭代方法：dispatch_apply、队列组：dispatch_group、信号量：dispatch_semaphore）
 
-
-
 #### 1.什么是 GCD？
 
 ```
@@ -52,8 +50,6 @@ GCD 拥有以上这么多的好处，而且在多线程中处于举足轻重的�
 **队列（Dispatch Queue）**：这里的队列指执行任务的等待队列，即用来存放任务的队列。
 
 队列是一种特殊的线性表，采用 FIFO（先进先出）的原则，即新任务总是被插入到队列的末尾，而读取任务的时候总是从队列的头部开始读取。每读取一个任务，则从队列中释放一个任务。
-
-
 
 在 GCD 中有两种队列：**『串行队列』** 和 **『并发队列』**。两者都符合 FIFO（先进先出）的原则。两者的主要区别是：**执行顺序不同，以及开启线程数不同。**
 
@@ -136,19 +132,13 @@ dispatch_async(queue, ^{
 
 ![](img/pic3.png)
 
-
-
 注意：从上边可看出： **『主线程』** 中调用 **『主队列』+『同步执行』** 会导致死锁问题。  
 这是因为 **主队列中追加的同步任务** 和 **主线程本身的任务** 两者之间相互等待，阻塞了 **『主队列』**，最终造成了主队列所在的线程（主线程）死锁问题。  
 而如果我们在 **『其他线程』** 调用 **『主队列』+『同步执行』**，则不会阻塞 **『主队列』**，自然也不会造成死锁问题。最终的结果是：**不会开启新线程，串行执行任务**。
 
-
-
 ##### 3.4 队列嵌套情况下，不同组合方式区别
 
 ![](img/pic4.png)
-
-
 
 ```
 dispatch_queue_t queue = dispatch_queue_create("test.queue", DISPATCH_QUEUE_SERIAL);
@@ -163,8 +153,6 @@ dispatch_async(queue, ^{    // 异步执行 + 串行队列
 执行上面的代码会导致 串行队列中追加的任务 和 串行队列中原有的任务 两者之间相互等待，阻塞了『串行队列』，最终造成了串行队列所在的线程（子线程）死锁问题。
 ```
 
-
-
 #### 4. GCD 的基本使用
 
 ##### 4.1 同步执行 + 并发队列
@@ -177,27 +165,27 @@ dispatch_async(queue, ^{    // 异步执行 + 串行队列
 - (void)syncConcurrent {
     NSLog(@"currentThread---%@",[NSThread currentThread]);  
     NSLog(@"syncConcurrent---begin");
-    
+
     dispatch_queue_t queue = dispatch_queue_create("net.bujige.testQueue", DISPATCH_QUEUE_CONCURRENT);
-    
+
     dispatch_sync(queue, ^{
         // 追加任务 1
         [NSThread sleepForTimeInterval:2]; // 模拟耗时操作
         NSLog(@"1---%@",[NSThread currentThread]); // 打印当前线程
     });
-    
+
     dispatch_sync(queue, ^{
         // 追加任务 2
         [NSThread sleepForTimeInterval:2];// 模拟耗时操作
         NSLog(@"2---%@",[NSThread currentThread]); // 打印当前线程
     });
-    
+
     dispatch_sync(queue, ^{
         // 追加任务 3
         [NSThread sleepForTimeInterval:2]; // 模拟耗时操作
         NSLog(@"3---%@",[NSThread currentThread]);// 打印当前线程
     });
-    
+
     NSLog(@"syncConcurrent---end");
 }
 
@@ -233,27 +221,27 @@ dispatch_async(queue, ^{    // 异步执行 + 串行队列
 - (void)asyncConcurrent {
     NSLog(@"currentThread---%@",[NSThread currentThread]); 
     NSLog(@"asyncConcurrent---begin");
-    
+
     dispatch_queue_t queue = dispatch_queue_create("net.bujige.testQueue", DISPATCH_QUEUE_CONCURRENT);
-    
+
     dispatch_async(queue, ^{
         // 追加任务 1
         [NSThread sleepForTimeInterval:2];// 模拟耗时操作
         NSLog(@"1---%@",[NSThread currentThread]);// 打印当前线程
     });
-    
+
     dispatch_async(queue, ^{
         // 追加任务 2
         [NSThread sleepForTimeInterval:2];// 模拟耗时操作
         NSLog(@"2---%@",[NSThread currentThread]); // 打印当前线程
     });
-    
+
     dispatch_async(queue, ^{
         // 追加任务 3
         [NSThread sleepForTimeInterval:2]; // 模拟耗时操作
         NSLog(@"3---%@",[NSThread currentThread]); // 打印当前线程
     });
-    
+
     NSLog(@"asyncConcurrent---end");
 }
 
@@ -284,9 +272,9 @@ dispatch_async(queue, ^{    // 异步执行 + 串行队列
 - (void)syncSerial {
     NSLog(@"currentThread---%@",[NSThread currentThread]);  
     NSLog(@"syncSerial---begin");
-    
+
     dispatch_queue_t queue = dispatch_queue_create("net.bujige.testQueue", DISPATCH_QUEUE_SERIAL);
-    
+
     dispatch_sync(queue, ^{
         // 追加任务 1
         [NSThread sleepForTimeInterval:2];// 模拟耗时操作
@@ -302,7 +290,7 @@ dispatch_async(queue, ^{    // 异步执行 + 串行队列
         [NSThread sleepForTimeInterval:2];// 模拟耗时操作
         NSLog(@"3---%@",[NSThread currentThread]);// 打印当前线程
     });
-    
+
     NSLog(@"syncSerial---end");
 }
 
@@ -333,9 +321,9 @@ dispatch_async(queue, ^{    // 异步执行 + 串行队列
 - (void)asyncSerial {
     NSLog(@"currentThread---%@",[NSThread currentThread]);  
     NSLog(@"asyncSerial---begin");
-    
+
     dispatch_queue_t queue = dispatch_queue_create("net.bujige.testQueue", DISPATCH_QUEUE_SERIAL);
-    
+
     dispatch_async(queue, ^{
         // 追加任务 1
         [NSThread sleepForTimeInterval:2];// 模拟耗时操作
@@ -351,7 +339,7 @@ dispatch_async(queue, ^{    // 异步执行 + 串行队列
         [NSThread sleepForTimeInterval:2];// 模拟耗时操作
         NSLog(@"3---%@",[NSThread currentThread]); // 打印当前线程
     });
-    
+
     NSLog(@"asyncSerial---end");
 }
 
@@ -385,30 +373,30 @@ dispatch_async(queue, ^{    // 异步执行 + 串行队列
  * 特点(其他线程调用)：不会开启新线程，执行完一个任务，再执行下一个任务。
  */
 - (void)syncMain {
-    
+
     NSLog(@"currentThread---%@",[NSThread currentThread]);  
     NSLog(@"syncMain---begin");
-    
+
     dispatch_queue_t queue = dispatch_get_main_queue();
-    
+
     dispatch_sync(queue, ^{
         // 追加任务 1
         [NSThread sleepForTimeInterval:2];  // 模拟耗时操作
         NSLog(@"1---%@",[NSThread currentThread]); // 打印当前线程
     });
-    
+
     dispatch_sync(queue, ^{
         // 追加任务 2
         [NSThread sleepForTimeInterval:2]; // 模拟耗时操作
         NSLog(@"2---%@",[NSThread currentThread]); // 打印当前线程
     });
-    
+
     dispatch_sync(queue, ^{
         // 追加任务 3
         [NSThread sleepForTimeInterval:2];  // 模拟耗时操作
         NSLog(@"3---%@",[NSThread currentThread]); // 打印当前线程
     });
-    
+
     NSLog(@"syncMain---end");
 }
 
@@ -466,27 +454,27 @@ syncMain 任务 在其他线程中执行到追加 任务 1 到主队列中，因
 - (void)asyncMain {
     NSLog(@"currentThread---%@",[NSThread currentThread]);  
     NSLog(@"asyncMain---begin");
-    
+
     dispatch_queue_t queue = dispatch_get_main_queue();
-    
+
     dispatch_async(queue, ^{
         // 追加任务 1
         [NSThread sleepForTimeInterval:2]; // 模拟耗时操作
         NSLog(@"1---%@",[NSThread currentThread]); // 打印当前线程
     });
-    
+
     dispatch_async(queue, ^{
         // 追加任务 2
         [NSThread sleepForTimeInterval:2];// 模拟耗时操作
         NSLog(@"2---%@",[NSThread currentThread]);// 打印当前线程
     });
-    
+
     dispatch_async(queue, ^{
         // 追加任务 3
         [NSThread sleepForTimeInterval:2]; // 模拟耗时操作
         NSLog(@"3---%@",[NSThread currentThread]);// 打印当前线程
     });
-    
+
     NSLog(@"asyncMain---end");
 }
 
@@ -507,8 +495,6 @@ syncMain 任务 在其他线程中执行到追加 任务 1 到主队列中，因
 任务是按顺序执行的（因为主队列是 串行队列，每次只有一个任务被执行，任务一个接一个按顺序执行）。
 ```
 
-
-
 ### 5. GCD 线程间的通信
 
 ```
@@ -520,12 +506,12 @@ syncMain 任务 在其他线程中执行到追加 任务 1 到主队列中，因
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     // 获取主队列
     dispatch_queue_t mainQueue = dispatch_get_main_queue();
-    
+
     dispatch_async(queue, ^{
         // 异步追加任务 1
         [NSThread sleepForTimeInterval:2]; // 模拟耗时操作
         NSLog(@"1---%@",[NSThread currentThread]); // 打印当前线程
-        
+
         // 回到主线程
         dispatch_async(mainQueue, ^{
             // 追加在主线程中执行的任务
@@ -541,5 +527,3 @@ syncMain 任务 在其他线程中执行到追加 任务 1 到主队列中，因
 
 可以看到在其他线程中先执行任务，执行完了之后回到主线程执行主线程的相应操作。
 ```
-
-

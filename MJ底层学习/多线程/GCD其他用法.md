@@ -282,3 +282,132 @@ Dispatch Semaphore 在实际开发中主要用于：
 
 - 保持线程同步，将异步执行任务转换为同步执行任务
 - 保证线程安全，为线程加锁
+
+###### 6.6.1 Dispatch Semaphore 线程同步
+
+需求：异步执行耗时任务，并使用异步执行的结果进行一些额外的操作。换句话说，相当于，将将异步执行任务转换为同步执行任务。
+
+```
+/**
+ * semaphore 线程同步
+ */
+- (void)semaphoreSync {
+
+    NSLog(@"currentThread---%@",[NSThread currentThread]); 
+    NSLog(@"semaphore---begin");
+
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+
+    __block int number = 0;
+    dispatch_async(queue, ^{
+        // 追加任务 1
+        [NSThread sleepForTimeInterval:2]; // 模拟耗时操作
+        NSLog(@"1---%@",[NSThread currentThread]);// 打印当前线程
+
+        number = 100;
+
+        dispatch_semaphore_signal(semaphore);
+    });
+
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+    NSLog(@"semaphore---end,number = %zd",number);
+}
+
+打印：
+[17988:4325744] currentThread—-{number = 1, name = main}
+[17988:4325744] semaphore—-begin
+[17988:4325867] 1—-{number = 3, name = (null)}
+[17988:4325744] semaphore—-end,number = 100
+```
+
+从 Dispatch Semaphore 实现线程同步的代码可以看到：
+
+- `semaphore---end`  是在执行完  `number = 100;`  之后才打印的。而且输出结果 number 为 100。这是因为  `异步执行`  不会做任何等待，可以继续执行任务。  
+  
+  执行顺如下：
+  1. semaphore 初始创建时计数为 0。
+  2. `异步执行`  将  `任务 1`  追加到队列之后，不做等待，接着执行  `dispatch_semaphore_wait`  方法，semaphore 减 1，此时  `semaphore == -1`，当前线程进入等待状态。
+  3. 然后，异步任务 1 开始执行。任务 1 执行到  `dispatch_semaphore_signal`  之后，总信号量加 1，此时  `semaphore == 0`，正在被阻塞的线程（主线程）恢复继续执行。
+  4. 最后打印  `semaphore---end,number = 100`。
+
+这样就实现了线程同步，将异步执行任务转换为同步执行任务。
+
+###### 6.6.2 Dispatch Semaphore 线程安全和线程同步（为线程加锁）
+
+**线程安全**：如果你的代码所在的进程中有多个线程在同时运行，而这些线程可能会同时运行这段代码。如果每次运行结果和单线程运行的结果是一样的，而且其他的变量的值也和预期的是一样的，就是线程安全的。
+
+若每个线程中对全局变量、静态变量只有读操作，而无写操作，一般来说，这个全局变量是线程安全的；若有多个线程同时执行写操作（更改变量），一般都需要考虑线程同步，否则的话就可能影响线程安全。
+
+**线程同步**：可理解为线程 A 和 线程 B 一块配合，A 执行到一定程度时要依靠线程 B 的某个结果，于是停下来，示意 B 运行；B 依言执行，再将结果给 A；A 再继续操作。
+
+举个简单例子就是：两个人在一起聊天。两个人不能同时说话，避免听不清(操作冲突)。等一个人说完(一个线程结束操作)，另一个再说(另一个线程再开始操作)。
+
+下面，我们模拟火车票售卖的方式，实现 NSThread 线程安全和解决线程同步问题。
+
+```
+/**
+ * 线程安全：使用 semaphore 加锁
+ * 初始化火车票数量、卖票窗口（线程安全）、并开始卖票
+ */
+- (void)initTicketStatusSave {
+    NSLog(@"currentThread---%@",[NSThread currentThread]);  
+    NSLog(@"semaphore---begin");
+
+    semaphoreLock = dispatch_semaphore_create(1);
+
+    self.ticketSurplusCount = 50;
+
+    // queue1 代表北京火车票售卖窗口
+    dispatch_queue_t queue1 = dispatch_queue_create("net.bujige.testQueue1", DISPATCH_QUEUE_SERIAL);
+    // queue2 代表上海火车票售卖窗口
+    dispatch_queue_t queue2 = dispatch_queue_create("net.bujige.testQueue2", DISPATCH_QUEUE_SERIAL);
+
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(queue1, ^{
+        [weakSelf saleTicketSafe];
+    });
+
+    dispatch_async(queue2, ^{
+        [weakSelf saleTicketSafe];
+    });
+}
+
+/**
+ * 售卖火车票（线程安全）
+ */
+- (void)saleTicketSafe {
+    while (1) {
+        // 相当于加锁
+        dispatch_semaphore_wait(semaphoreLock, DISPATCH_TIME_FOREVER);
+
+        if (self.ticketSurplusCount > 0) {  // 如果还有票，继续售卖
+            self.ticketSurplusCount--;
+            NSLog(@"%@", [NSString stringWithFormat:@"剩余票数：%d 窗口：%@", self.ticketSurplusCount, [NSThread currentThread]]);
+            [NSThread sleepForTimeInterval:0.2];
+        } else { // 如果已卖完，关闭售票窗口
+            NSLog(@"所有火车票均已售完");
+
+            // 相当于解锁
+            dispatch_semaphore_signal(semaphoreLock);
+            break;
+        }
+
+        // 相当于解锁
+        dispatch_semaphore_signal(semaphoreLock);
+    }
+}
+
+打印：
+`[18116:4348091] currentThread—-{number = 1, name = main}`
+`[18116:4348091] semaphore—-begin`
+`[18116:4348159] 剩余票数：49 窗口：{number = 3, name = (null)}`
+`[18116:4348157] 剩余票数：48 窗口：{number = 4, name = (null)}`
+`[18116:4348159] 剩余票数：47 窗口：{number = 3, name = (null)}`
+`…`
+`[18116:4348157] 剩余票数：2 窗口：{number = 4, name = (null)}`
+`[18116:4348159] 剩余票数：1 窗口：{number = 3, name = (null)}`
+`[18116:4348157] 剩余票数：0 窗口：{number = 4, name = (null)}`
+`[18116:4348159] 所有火车票均已售完`
+``[18116:4348157] 所有火车票均已售完
+```
