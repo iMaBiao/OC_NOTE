@@ -201,11 +201,8 @@ typedef NS_ENUM(NSInteger, NSOperationQueuePriority) {
 - **线程安全**：如果你的代码所在的进程中有多个线程在同时运行，而这些线程可能会同时运行这段代码。如果每次运行结果和单线程运行的结果是一样的，而且其他的变量的值也和预期的是一样的，就是线程安全的。  
   
   若每个线程中对全局变量、静态变量只有读操作，而无写操作，一般来说，这个全局变量是线程安全的；若有多个线程同时执行写操作（更改变量），一般都需要考虑线程同步，否则的话就可能影响线程安全。
-  
-  
+
 - **线程同步**：可理解为线程 A 和 线程 B 一块配合，A 执行到一定程度时要依靠线程 B 的某个结果，于是停下来，示意 B 运行；B 依言执行，再将结果给 A；A 再继续操作。
-
-
 
 ##### NSOperation、NSOperationQueue 线程安全
 
@@ -293,11 +290,7 @@ iOS 实现线程加锁有很多种方式。@synchronized、 NSLock、NSRecursive
 
 **可以看出：在考虑了线程安全，使用 NSLock 加锁、解锁机制的情况下，得到的票数是正确的，没有出现混乱的情况。我们也就解决了多个线程同步的问题。**
 
-
-
 #### NSOperation、NSOperationQueue 常用属性和方法归纳
-
-
 
 ##### NSOperation 常用属性和方法
 
@@ -314,8 +307,6 @@ iOS 实现线程加锁有很多种方式。@synchronized、 NSLock、NSRecursive
    - `- (void)addDependency:(NSOperation *)op;`  添加依赖，使当前操作依赖于操作 op 的完成。
    - `- (void)removeDependency:(NSOperation *)op;`  移除依赖，取消当前操作对操作 op 的依赖。
    - `@property (readonly, copy) NSArray<NSOperation *> *dependencies;`  在当前操作开始执行之前完成执行的所有操作对象数组。
-
-
 
 ##### NSOperationQueue 常用属性和方法
 
@@ -334,11 +325,8 @@ iOS 实现线程加锁有很多种方式。@synchronized、 NSLock、NSRecursive
    - `+ (id)currentQueue;`  获取当前队列，如果当前线程不是在 NSOperationQueue 上运行则返回 nil。
    - `+ (id)mainQueue;`  获取主队列。
 
-
-
 注意：
 
 1. 这里的暂停和取消（包括操作的取消和队列的取消）并不代表可以将当前的操作立即取消，而是当当前的操作执行完毕之后不再执行新的操作。
-   
-   
+
 2. 暂停和取消的区别就在于：暂停操作之后还可以恢复操作，继续向下执行；而取消操作之后，所有的操作就清空了，无法再接着执行剩下的操作。
