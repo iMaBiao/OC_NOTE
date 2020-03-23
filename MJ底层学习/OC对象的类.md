@@ -1,11 +1,11 @@
 OC对象分为：实例对象、类对象、元类对象
 
-```
+```objective-c
 实例对象
 NSObject *obj1 = [[NSObject alloc]init];
 ```
 
-```
+```objective-c
 类对象，内存中只要一份
 Class objectClass1 = [obj1 class];
 Class objectClass2 = object_getClass(obj1);
@@ -15,7 +15,7 @@ Class objectClass3 = [NSObject class];
 Class objectClass3 = [[NSObject class]class];
 ```
 
-```
+```objective-c
 元类对象 meta-class
 Class objMetaClass = object_getClass(objectClass1);
 
@@ -55,7 +55,7 @@ isa指针、superclass指针、属性信息、对象方法信息、协议信息�
 
 返回的就是类对象
 
-```
+```objective-c
 -（Class）{
     return self->isa;
  }

@@ -2,7 +2,7 @@
 
 
 
-```
+```objective-c
 NSLog(@"[self class] = %@",[self class]);
 NSLog(@"[super class] = %@",[super class]);
 NSLog(@"============");
@@ -18,7 +18,7 @@ NSLog(@"[super superclass] = %@",[super superclass]);
 
 我们还是我们还是在源码中查找一下,我们搜索`NSObject`，然后在`.mm`文件中找到了一些实现
 
-```
+```objective-c
 + (id)self {
     return (id)self;
 }
@@ -50,7 +50,7 @@ NSLog(@"[super superclass] = %@",[super superclass]);
 
 
 
-```
+```objective-c
 object_getClass的实现为
 Class object_getClass(id obj)
 {
@@ -72,7 +72,7 @@ struct __rw_objc_super {
 
 我们可以把上面代码转化为
 
-```
+```objective-c
 struct objc_super {
     __unsafe_unretained _Nonnull id receiver; // 消息接收者
     __unsafe_unretained _Nonnull Class super_class; // 消息接收者的父类

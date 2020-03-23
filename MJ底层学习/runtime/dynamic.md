@@ -9,7 +9,7 @@ Objective-C 2.0 提供了@dynamic关键字。这个关键字有两个作用：
 
  默认情况下，编译器会为当前类自动生成一个NSString *_string的实例变量（如果想改变实例变量的名称可以用@synthesize关键字）。 同时会生成两个名为
 
-```
+```objective-c
 /**getter 方法 */
 - (NSString *)string 
 /**setter 方法  */
