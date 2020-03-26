@@ -199,3 +199,11 @@ NSInvocation封装了一个方法调用，包括：方法调用者、方法名�
     [anInvocation invoke];
 }
 ```
+
+
+
+补充：
+
+一个完整的方法执行流程
+
+![](img/方法执行流程.png)

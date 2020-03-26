@@ -46,7 +46,7 @@
 
 判断一个对象是否是指定类或者某个从该类继承类的实例对象
 
-```
+```objective-c
 - (BOOL)isKindOfClass:(Class)cls {
     for (Class tcls = [self class]; tcls; tcls = tcls->superclass) {
     if (tcls == cls) return YES;
