@@ -1,13 +1,13 @@
-###AsyncDisplayKit的使用
+### AsyncDisplayKit的使用
 
 ------
-#一、简介
-####AsyncDisplayKit 是一个UI框架，最初诞生于 Facebook 的 Paper 应用程序。它是为了解决 Paper 团队面临的核心问题之一：如何尽可能缓解主线程的压力？
-![](http://box.kancloud.cn/2015-11-19_564d50036b436.png)
-ASDK 的作者是 Scott Goodson (Linkedin)，
-他曾经在苹果工作，负责 iOS 的一些内置应用的开发，比如股票、计算器、地图、钟表、设置、Safari 等，当然他也参与了 UIKit framework 的开发。后来他加入 Facebook 后，负责 Paper 的开发，创建并开源了 AsyncDisplayKit。目前他在 Pinterest 和 Instagram 负责 iOS 开发和用户体验的提升等工作。
+##### 一、简介
 
-## 1.解决的问题
+AsyncDisplayKit 是一个UI框架，最初诞生于 Facebook 的 Paper 应用程序。它是为了解决 Paper 团队面临的核心问题之一：如何尽可能缓解主线程的压力？
+
+
+
+### 1.解决的问题
 
 很多时候用户在操作app的时候，会感觉到不适那么流畅，有所卡顿。
 ASDK主要就是解决的问题就是操作页面过程中的保持帧率在60fps（理想状态下）的问题。
@@ -16,7 +16,7 @@ ASDK主要就是解决的问题就是操作页面过程中的保持帧率在60fp
 CPU或GPU消耗过大，导致在一次同步信号之间没有准备完成，没有内容提交，导致掉帧的问题。
 具体的原理，在[提升 iOS 界面的渲染性能](https://zhuanlan.zhihu.com/p/22255533?refer=iOS-Source-Code)文章中介绍的十分详细了，这里也不多阐述了。
 
-## 2.优化原理
+### 2.优化原理
 * 布局：
 iOS自带的Autolayout在布局性能上存在瓶颈，并且只能在主线程进行计算。（参考Auto Layout Performance on iOS）因此ASDK弃用了Autolayout，自己参考自家的ComponentKit设计了一套布局方式。
 * 渲染
@@ -29,7 +29,7 @@ UIKit组件封装了CALayer图层的对象，在创建、调整、销毁的时�
 ###`ASDK 认为，阻塞主线程的任务，主要分为上面这三大类。`
 ###`为了尽量优化性能，ASDK 尝试对 UIKit 组件进行封装：`
 
-## 3.Nodes节点
+### 3.Nodes节点
 * 如果你之前使用过views，那么你应该已经知道如何使用nodes，大部分的方法都有一个等效的node，大部分的UIView和CALayer的属性都有类似的可用的。任何情况都会有一点点命名差异（例如，clipsToBounds和masksToBounds），node基本上都是默认使用UIView的名字，唯一的例外是node使用position而不是center
 
 * 当然，你也可以直接访问底层view和layer，使用node.view和node.layer
@@ -41,19 +41,19 @@ UIKit组件封装了CALayer图层的对象，在创建、调整、销毁的时�
 ![不需要响应触摸事件](http://box.kancloud.cn/2015-11-19_564d5003d8c06.png)
 
 * Node控件
-| **ASDK**        | **UIKit**   | 
-| --------   | -----  | 
-| ASDisplayNode     | UIView |   
+| **ASDK**        | **UIKit**   |
+| --------   | -----  |
+| ASDisplayNode     | UIView |
 | ASCellNode|UITableViewCell/UICollectionViewCell|
-| ASTextNode        |    UILabel    | 
-| ASImageNode/ASNetworkImageNode| UIImageView |   
+| ASTextNode        |    UILabel    |
+| ASImageNode/ASNetworkImageNode| UIImageView |
 | ASVideoNode        |   AVPlayerLayer   |
-| ASControlNode        |    UIControl    | 
-| ASScrollNode     | UIScrollView |   
+| ASControlNode        |    UIControl    |
+| ASScrollNode     | UIScrollView |
 | ASEditableTextNode        |   UITextView   |
-| ASMultiplexImageNode（图片管理）        |    UIImageView    | 
+| ASMultiplexImageNode（图片管理）        |    UIImageView    |
 
-## 4.安装
+### 4.安装
 #### CocoaPods安装
 ```python
 pod 'AsyncDisplayKit'
@@ -75,13 +75,13 @@ AsyncDisplayKit可以当做静态库引入
 #二、使用
 主要介绍常用控件ASTableNode/ASCollectionNode的使用，代码放在GitHub上的[ASDK_Demo](https://github.com/LineShine/ASDK_Demo.git)。
 
-## 1.ASImageNode
+### 1.ASImageNode
 > - 使用ASNetworkImageNode的URL设置网络图片。
 > - ASNetworkImageNode有图片下载的ASNetworkImageNodeDelegate
 > - ASImageNode使用ASDK的图片管理类**PINCache,PINRemoteImage**
 > - 如果不打算引入PINRemoteImage和PINCache，你会失去对jpeg的更好的支持，你需要自行引入你自己的cache系统，需要遵从ASImageCacheProtocol
 
-## 2.ASTextNode
+### 2.ASTextNode
 ASTextNode没有text属性，只能使用attributedText
 ```python
 //居中
@@ -93,12 +93,12 @@ labelNode.attributedText = [[NSAttributedString alloc] initWithString:@"居中�
                                                                                                       NSBackgroundColorAttributeName : [UIColor clearColor],
                                                                                                       NSParagraphStyleAttributeName:paragraphStyle}];
 ```
-## 3.ASTableNode/ASCollectionNode
+### 3.ASTableNode/ASCollectionNode
 * ASTableNode/ASCollectionNode不支持复用机制，每次滚动都会重新创建cell。
 * ASTableNode并不提供类似UITableview的-tableView:heightForRowAtIndexPath:方法，这是因为节点基于自己的约束来确定自己的高度，就是说你不再需要写代码来确定这个细节，一个node通过-layoutSpecThatFits:方法返回的布局规则确定了行高，所有的节点只要提供了约束大小，就有能力自己确定自己的尺寸
 * 使用 Batch Fetching 进行无限滚动，即预加载功能
 
-# 三、布局
+## 三、布局
 [引用1](http://www.jianshu.com/p/afc69cd9e824)
 [引用2](https://segmentfault.com/a/1190000007991853#articleHeader11)
 ####ASDK 拥有自己的一套成熟布局方案，虽然学习成本略高，但至少比原生的 AutoLayout 写起来舒服，重点是性能比起 AutoLayout 好的不是一点点。（ASDK不支持autoLayout）
@@ -108,7 +108,7 @@ labelNode.attributedText = [[NSAttributedString alloc] initWithString:@"居中�
 //调用时机：ASDisplayNode 在初始化之后会检查是否有子视图，如果有就会调用
 - (ASLayoutSpec *)layoutSpecThatFits:(ASSizeRange)constrainedSize 
 ```
-## 1. 布局类
+### 1. 布局类
 * ASAbsoluteLayoutSpec（绝对布局约束)
 * ASBackgroundLayoutSpec（背景布局规则）
 * ASInsetLayoutSpec（边距布局规则）
@@ -119,7 +119,7 @@ labelNode.attributedText = [[NSAttributedString alloc] initWithString:@"居中�
 * ASStackLayoutSpec（堆叠布局规则）
 * ASWrapperLayoutSpec （填充布局规则）
 
-## 2.示例
+### 2.示例
 ###ASAbsoluteLayoutSpec
 ```python
 - (ASLayoutSpec *)layoutSpecThatFits:(ASSizeRange)constrainedSize{
@@ -253,7 +253,7 @@ labelNode.attributedText = [[NSAttributedString alloc] initWithString:@"居中�
 > - `ASStackLayoutAlignItemsBaselineLast` 以最后一个文字元素基线排列（主轴是横向才可用）
 > 5.`children`: 包含的视图。数组内元素顺序同样代表着布局时排列的顺序
 
-# 四、优缺点
+## 四、优缺点
 > - 需要自己造轮子
 > - 不支持大家常用的storyboard、xib、autoLayout，影响开发效率
 > - 代码没有UIKit使用熟练
@@ -261,4 +261,4 @@ labelNode.attributedText = [[NSAttributedString alloc] initWithString:@"居中�
 > - 但是可以和UIKit混合开发
 
 
-  [1]: 41231
+[1]: 41231

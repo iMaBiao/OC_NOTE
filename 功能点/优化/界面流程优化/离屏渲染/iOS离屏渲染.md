@@ -17,9 +17,7 @@
 
 在WWDC的Advanced Graphics and Animations for iOS Apps（WWDC14 419，关于UIKit和Core Animation基础的session在早年的WWDC中比较多）中有这样一张图：
 
-![](images/pic4.jpg)
-
-
+![](../images/pic4.jpg)
 
 可以看到，在Application这一层中主要是CPU在操作，而到了Render Server这一层，CoreAnimation会将具体操作转换成发送给GPU的draw calls（以前是call OpenGL ES，现在慢慢转到了Metal），显然CPU和GPU双方同处于一个流水线中，协作完成整个渲染工作。
 
@@ -29,7 +27,7 @@
 
 如果要在显示屏上显示内容，我们至少需要一块与屏幕像素数据量一样大的frame buffer，作为像素数据存储区域，而这也是GPU存储渲染结果的地方。如果有时因为面临一些限制，无法把渲染结果直接写入frame buffer，而是先暂存在另外的内存区域，之后再写入frame buffer，那么这个过程被称之为离屏渲染。
 
-![](images/pic5.jpg)
+![](../images/pic5.jpg)
 
 渲染结果先经过了离屏buffer，再到frame buffer
 
@@ -65,7 +63,7 @@ Speaking of caching: if you’re doing a lot of this kind of drawing all over yo
 
 在上面的渲染流水线示意图中我们可以看到，主要的渲染操作都是由CoreAnimation的Render Server模块，通过调用显卡驱动所提供的OpenGL/Metal接口来执行的。通常对于每一层layer，Render Server会遵循“[画家算法](https://link.zhihu.com/?target=https%3A//en.wikipedia.org/wiki/Painter%2527s_algorithm)”，按次序输出到frame buffer，后一层覆盖前一层，就能得到最终的显示结果（值得一提的是，与一般桌面架构不同，在iOS中，设备主存和GPU的显存[共享物理内存](https://link.zhihu.com/?target=https%3A//apple.stackexchange.com/questions/54977/how-much-gpu-memory-do-iphones-and-ipads-have)，这样可以省去一些数据传输开销）。
 
-![](images/pic6.jpg)
+![](../images/pic6.jpg)
 
 ”画家算法“，把每一层依次输出到画布
 
@@ -86,10 +84,9 @@ Speaking of caching: if you’re doing a lot of this kind of drawing all over yo
 
 - cornerRadius+clipsToBounds，原因就如同上面提到的，不得已只能另开一块内存来操作。而如果只是设置cornerRadius（如不需要剪切内容，只需要一个带圆角的边框），或者只是需要裁掉矩形区域以外的内容（虽然也是剪切，但是稍微想一下就可以发现，对于纯矩形而言，实现这个算法似乎并不需要另开内存），并不会触发离屏渲染。关于剪切圆角的性能优化，根据场景不同有几个方案可供选择，非常推荐阅读[AsyncDisplayKit中的一篇文档]((https://texturegroup.org/docs/corner-rounding.html))。
   
-  
 - shadow，其原因在于，虽然layer本身是一块矩形区域，但是阴影默认是作用在其中”非透明区域“的，而且需要显示在所有layer内容的下方，因此根据画家算法必须被渲染在先。但矛盾在于**此时阴影的本体（layer和其子layer）都还没有被组合到一起，怎么可能在第一步就画出只有完成最后一步之后才能知道的形状呢**？这样一来又只能另外申请一块内存，把本体内容都先画好，再根据渲染结果的形状，添加阴影到frame buffer，最后把内容画上去（这只是我的猜测，实际情况可能更复杂）。不过如果我们能够预先告诉CoreAnimation（通过shadowPath属性）阴影的几何形状，那么阴影当然可以先被独立渲染出来，不需要依赖layer本体，也就不再需要离屏渲染了。
 
-   ![](images/pic7.jpg)
+   ![](../images/pic7.jpg)
 
     阴影会作用在所有子layer所组成的形状上，那就只能等全部子layer画完才能得到
 
@@ -97,7 +94,7 @@ Speaking of caching: if you’re doing a lot of this kind of drawing all over yo
 
 - group opacity，其实从名字就可以猜到，alpha并不是分别应用在每一层之上，而是只有到整个layer树画完之后，再统一加上alpha，最后和底下其他layer的像素进行组合。显然也无法通过一次遍历就得到最终结果。将一对蓝色和红色layer叠在一起，然后在父layer上设置opacity=0.5，并复制一份在旁边作对比。左边关闭group opacity，右边保持默认（从iOS7开始，如果没有显式指定，group opacity会默认打开），然后打开offscreen rendering的调试，我们会发现右边的那一组确实是离屏渲染了。
   
-  ![](images/pic8.jpg)
+  ![](../images/pic8.jpg)
   
   同样的两个view，右边打开group opacity（默认行为）的被标记为Offscreen rendering
 
