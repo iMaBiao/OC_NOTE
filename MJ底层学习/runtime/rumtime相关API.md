@@ -2,7 +2,7 @@
 
 #### 类方法
 
-```
+```objective-c
 -   1、`Class objc_allocateClassPair(Class superclass, const char *name, size_t extraBytes)` 动态创建一个类（参数：父类，类名，额外的内存空间）
 -   2、`void objc_registerClassPair(Class cls)` 注册一个类（要在类注册之前添加成员变量）
 -   3、`void objc_disposeClassPair(Class cls)` 销毁一个类
@@ -21,7 +21,7 @@
 
 **创建类**
 
-```
+```objective-c
 // 创建类
 Class newClass = objc_allocateClassPair([NSObject class], "MJDog", 0);
 class_addIvar(newClass, "_age", 4, 1, @encode(int));
@@ -45,7 +45,7 @@ free(ivars);
 
 **设置isa指向的Class**
 
-```
+```objective-c
 Person *p = [[Person alloc]init];
 object_setClass(p, [Cat class]);
 NSLog(@"%@",p);
@@ -55,7 +55,7 @@ p的类型就是Cat了
 
 #### 成员变量
 
-```
+```objective-c
 1、Ivar class_getInstanceVariable(Class cls, const char *name) 获取一个实例变量信息
 2、Ivar *class_copyIvarList(Class cls, unsigned int *outCount) 拷贝实例变量列表（最后需要调用free释放）
 3、void object_setIvar(id obj, Ivar ivar, id value) 设置成员变量的值
@@ -66,7 +66,7 @@ p的类型就是Cat了
 
 最常用的方法就是获取类的成员变量
 
-```
+```objective-c
 unsigned int count;
 Ivar *ivars = class_copyIvarList([Person class], &count);
 for (int i = 0; i < count; i++) {
@@ -84,7 +84,7 @@ free(ivars);
 
 #### 属性
 
-```
+```objective-c
 1、objc_property_t class_getProperty(Class cls, const char *name) 获取一个属性
 
 2、objc_property_t *class_copyPropertyList(Class cls, unsigned int *outCount)拷贝属性列表（最后需要调用free释放）
@@ -100,7 +100,7 @@ free(ivars);
 
 #### 方法
 
-```
+```objective-c
 1、获得一个实例方法、类方法 - Method class_getInstanceMethod(Class cls, SEL name) - Method class_getClassMethod(Class cls, SEL name)
 
 2、方法实现相关操作 - IMP class_getMethodImplementation(Class cls, SEL name) - IMP method_setImplementation(Method m, IMP imp) - void method_exchangeImplementations(Method m1, Method m2)
@@ -127,7 +127,7 @@ BOOL imp_removeBlock(IMP anImp)
 
 最常见的就是动态方法交换
 
-```
+```objective-c
 Method runMethod = class_getInstanceMethod([Person class], @selector(run));
 Method testMethod = class_getInstanceMethod([Person class], @selector(test));
 method_exchangeImplementations(runMethod, testMethod)
@@ -135,7 +135,7 @@ method_exchangeImplementations(runMethod, testMethod)
 
 还有一个方法替换,利用block
 
-```
+```objective-c
 MJPerson *person = [[Person alloc] init];
 
 //        class_replaceMethod([Person class], @selector(run), (IMP)myrun, "v");
