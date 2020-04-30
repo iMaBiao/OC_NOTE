@@ -108,7 +108,7 @@ dispatch_async(queue, ^{
 
 ##### 在当前线程中执行任务，不会开启新线程，执行完一个任务，再执行下一个任务。
 
-```
+```objective-c
 - (void)syncConcurrent
 {
     NSLog(@"currentThread---%@",[NSThread currentThread]);  // 打印当前线程
@@ -167,7 +167,7 @@ syncConcurrent---end
 
 ##### 2、**异步 + 并发队列**
 
-```
+```objective-c
 - (void)asyncConcurrent
 {
     NSLog(@"currentThread---%@",[NSThread currentThread]);  // 打印当前线程
@@ -223,7 +223,7 @@ syncConcurrent---end
 
 ##### 3、**同步 + 串行队列**
 
-```
+```objective-c
 - (void)syncSerial
 {
     NSLog(@"currentThread---%@",[NSThread currentThread]);  // 打印当前线程
@@ -278,7 +278,7 @@ syncConcurrent---end
 
 ##### 4、**异步 + 串行队列**
 
-```
+```objective-c
 - (void)asyncSerial
 {
     NSLog(@"currentThread---%@",[NSThread currentThread]);  // 打印当前线程
@@ -333,7 +333,7 @@ syncConcurrent---end
 
 ##### 5.1、**同步执行 + 主队列**
 
-```
+```objective-c
 - (void)syncMain
 {
     NSLog(@"currentThread---%@",[NSThread currentThread]);  // 打印当前线程
@@ -379,7 +379,7 @@ asyncConcurrent---begin
 
 那么，现在的情况就是syncMain任务和任务1都在等对方执行完毕。这样大家互相等待，所以就卡住了，所以我们的任务执行不了，而且syncMain---end也没有打印。
 
-```
+```objective-c
 补充：通常情况下，在一个线程正在执行一个串行队列sQueue上任务的过程中，再次调用dispatch_sync同步执行这个串行队列sQueue在上的任务，就会引起死锁
 
 // 同一串行线程 sync死锁
@@ -425,7 +425,7 @@ ThreadDemo[2042:59555] 2
 
 ##### 6、**异步 + 主队列**
 
-```
+```objective-c
 - (void)asyncMain
 {
     NSLog(@"currentThread---%@",[NSThread currentThread]);  // 打印当前线程
