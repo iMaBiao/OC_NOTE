@@ -1,5 +1,7 @@
 ##### GCD
 
+官方源码：https://opensource.apple.com/tarballs/libdispatch/
+
 详尽内容参考：
 
 ###### [iOS 多线程：『GCD』详尽总结](https://bujige.net/blog/iOS-Complete-learning-GCD.html)
