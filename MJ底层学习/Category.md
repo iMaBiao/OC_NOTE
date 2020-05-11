@@ -29,43 +29,169 @@ attachLists
 realloc、memmove、 memcpy
 ```
 
-### load
+部分关键源码（方法有删减）
 
-- ##### +load方法会在runtime加载类、分类时调用
+```objective-c
+objc-runtime-new.mm
 
-- ##### 每个类、分类的+load，在程序运行过程中只调用一次
+//重组类的方法
+static void remethodizeClass(Class cls)
+{
+    category_list *cats;
+    bool isMeta;
+    isMeta = cls->isMetaClass();
 
-- 调用顺序
+    // Re-methodizing: check for more categories
+    if ((cats = unattachedCategoriesForClass(cls, false/*not realizing*/))) {
+        if (PrintConnecting) {
+            _objc_inform("CLASS: attaching categories to class '%s' %s", 
+                         cls->nameForLogging(), isMeta ? "(meta)" : "");
+        }
+        
+      //添加分类方法
+        attachCategories(cls, cats, true /*flush caches*/);        
+        free(cats);
+    }
+}
+  
+//添加分类方法
+static void 
+attachCategories(Class cls, category_list *cats, bool flush_caches)
+{
+    if (!cats) return;
+    if (PrintReplacedMethods) printReplacements(cls, cats);
 
-##### 1、先调用类的+load
+    bool isMeta = cls->isMetaClass();
 
-        按照编译先后顺序调用（先编译，先调用）
-    
-        调用子类的+load之前会先调用父类的+load
+    // fixme rearrange to remove these intermediate allocations
+  	
+  	//方法数组  
+  	/* 二维数组
+  	  [ 
+  	  	[method_t,method_t], 分类1的方法列表
+  	  	[method_t,method_t] ,分类2的方法列表
+  	  ]
+  	*/
+    method_list_t **mlists = (method_list_t **)
+        malloc(cats->count * sizeof(*mlists));
+   
+  //属性数组
+  	/* 二维数组
+  		[ 
+  	  	[property_t,property_t], 分类1的属性列表
+  	  	[property_t,property_t] ,分类2的属性列表
+  	  ]
+  	*/
+    property_list_t **proplists = (property_list_t **)
+        malloc(cats->count * sizeof(*proplists));
+   
+  //协议数组
+    /* 二维数组
+  		[ 
+  	  	[protocol_t,protocol_t], 分类1的协议列表
+  	  	[protocol_t,protocol_t] ,分类2的协议列表
+  	  ]
+  	*/
+    protocol_list_t **protolists = (protocol_list_t **)
+        malloc(cats->count * sizeof(*protolists));
 
-##### 2、再调用分类的+load
+    // Count backwards through cats to get newest categories first
+    int mcount = 0;
+    int propcount = 0;
+    int protocount = 0;
+    int i = cats->count;
+    bool fromBundle = NO;
+    while (i--) {
+      	//取出某个分类
+        auto& entry = cats->list[i];
+				//entry.cat中就包含 category_t *cat;  再判断是元类
+      	//就可以取出分类中的（对象/类）方法列表
+        method_list_t *mlist = entry.cat->methodsForMeta(isMeta);
+        if (mlist) {
+            mlists[mcount++] = mlist;
+            fromBundle |= entry.hi->isBundle();
+        }
 
-           按照编译先后顺序调用（先编译，先调用）
+        property_list_t *proplist = 
+            entry.cat->propertiesForMeta(isMeta, entry.hi);
+        if (proplist) {
+            proplists[propcount++] = proplist;
+        }
 
-- #### +load方法是根据方法地址直接调用，并不是经过objc_msgSend函数调用
+        protocol_list_t *protolist = entry.cat->protocols;
+        if (protolist) {
+            protolists[protocount++] = protolist;
+        }
+    }
+		
+  	//得到类对象里面的数据
+  	//参考类的结构，类中有 class_rw_t 
+    auto rw = cls->data();
 
-### initialize
+    prepareMethodLists(cls, mlists, mcount, NO, fromBundle);
+  	//将所有分类方法列表附加到类对象的方法列表中
+    rw->methods.attachLists(mlists, mcount);
+    free(mlists);
+    if (flush_caches  &&  mcount > 0) flushCaches(cls);
+		//将所有分类属性列表附加到类对象的属性列表中
+    rw->properties.attachLists(proplists, propcount);
+    free(proplists);
+		//将所有分类协议列表附加到类对象的协议列表中
+    rw->protocols.attachLists(protolists, protocount);
+    free(protolists);
+}
 
-- ##### +initialize方法会在类第一次接收到消息时调用
+/*
 
-- 调用顺序
+  参数：	addedLists
+	  	[ 
+  	  	[method_t,method_t], 分类1的方法（属性、协议）列表
+  	  	[method_t,method_t] ,分类2的方法（属性、协议）列表
+  	  ]
+  	  addedCount ： 方法个数
+*/
+void attachLists(List* const * addedLists, uint32_t addedCount) {
+        if (addedCount == 0) return;
 
-##### 先调用父类的+initialize，再调用子类的+initialize
+        if (hasArray()) {
+            // many lists -> many lists
+            uint32_t oldCount = array()->count;
+            uint32_t newCount = oldCount + addedCount;
+          	//重新分配内存 newCount 
+            setArray((array_t *)realloc(array(), array_t::byteSize(newCount)));
+            array()->count = newCount;
 
-##### (先初始化父类，再初始化子类，每个类只会初始化1次)
+          	// array()->lists 原来的方法列表
+          	//将方法列表后移addCount位置
+            memmove(array()->lists + addedCount, array()->lists, 
+                    oldCount * sizeof(array()->lists[0]));
+          	// addedLists 所有分类方法列表
+          	//将分类方法加到类方法列表的最前端
+            memcpy(array()->lists, addedLists, 
+                   addedCount * sizeof(array()->lists[0]));
+          //所以类和分类中有同名方法，优先调用分类中的方法（多个分类时最后编译的分类方法放到前面）
+        }
+        else if (!list  &&  addedCount == 1) {
+            // 0 lists -> 1 list
+            list = addedLists[0];
+        } 
+        else {
+            // 1 list -> many lists
+            List* oldList = list;
+            uint32_t oldCount = oldList ? 1 : 0;
+            uint32_t newCount = oldCount + addedCount;
+          	
+            setArray((array_t *)malloc(array_t::byteSize(newCount)));
+            array()->count = newCount;
+            if (oldList) array()->lists[addedCount] = oldList;
+            memcpy(array()->lists, addedLists, 
+                   addedCount * sizeof(array()->lists[0]));
+        }
+    }
 
-- ##### +initialize和+load的很大区别是，+initialize是通过objc_msgSend进行调用的，所以有以下特点
+```
 
-- ##### 如果子类没有实现+initialize，会调用父类的+initialize（所以父类的+initialize可能会被调用多次）
 
-- ##### 如果分类实现了+initialize，就覆盖类本身的+initialize调用
-
-面试题：
 
 ##### Category的实现原理
 
@@ -79,32 +205,4 @@ realloc、memmove、 memcpy
 
 - Category是在运行时，才会将数据合并到类信息中
 
-category中有load方法吗？load方法什么时候调用？load方法能继承吗？
-
-有，能继承
-
-- load、initialize方法的区别是什么？
-
-  1、调用方式
-
-       load是根据函数地址直接调用
-      
-      initialize是通过objc_msgsend调用
-
-  2、调用时刻
-
-      load是runtime加载类、分类的时候调用（只会调用一次）
-      
-      initialize是类第一次接收到消息的时候调用，每一个类只会initialize一次（父类的initialize方法可能会被调用多次）
-
-- load 、initialize的调用顺序？
-
-  1、load :   
-
-  先调用类的load ；先编译的类，优先调用load；调用子类的load之前，会先调用父类的load
-
-  再调用分类的load, 先编译的分类，优先调用load
-
-  2、initialize
-
-  先初始化父类，再初始化子类（可能最终调用的是父类的initialize方法）
+  

@@ -2,11 +2,11 @@
 
 ```objective-c
    1、 利用runtimeAPI动态生成一个子类（NSKVONotifying_XXX）,并且让instance对象的isa指向这个全新的子类
-   2、当修改instance对象的属性时，会调用Foundation的 _NSSetXXXValueAndNotify函数
+   2、当修改instance对象的属性时，会调用Foundation的 _NSSetXXXValueAndNotify函数（_NSSetIntValueAndNotify、_NSSetDoubleValueAndNotify）
    在函数内会调用以下三个方法
      1 willChangeValueForKey:
 
-     2 父类原来的setter
+     2 父类原来的setter方法
 
      3 didChangeValueForKey:  内部会触发（Obrserve)的监听方法：
     observeValueForKeyPath: ofObject: change: context:
@@ -15,3 +15,4 @@
 #### 如何手动触发KVO?
 
 手动调用willChangeValueForKe:   和  didChangeValueForKey: 
+

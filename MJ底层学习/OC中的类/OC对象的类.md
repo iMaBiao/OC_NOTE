@@ -1,4 +1,8 @@
-OC对象分为：实例对象、类对象、元类对象
+### OC对象的类
+
+
+
+##### OC对象分为：实例对象、类对象、元类对象
 
 ```objective-c
 实例对象
@@ -27,11 +31,13 @@ BOOL isMetaClass = class_isMetaCLass(objMetaClass)
 
 元类对象和类对象内存结构是一样的，但用途不一样
 
-主要包括：isa 指针、superclass指针、类的类方法信息
+主要包括：**isa 指针、superclass指针、类的类方法信息**
+
+
 
 类对象主要包括：
 
-isa指针、superclass指针、属性信息、对象方法信息、协议信息、成员变量信息
+**isa指针、superclass指针、属性信息、对象方法信息、协议信息、成员变量信息**
 
 成员变量值的信息保存在实例对象中
 
@@ -67,7 +73,7 @@ isa指针、superclass指针、属性信息、对象方法信息、协议信息�
 
 **isa**  、**superclass**总结
 
-![](img/isa--superclass指针指向图.png)
+![](../img/isa--superclass指针指向图.png)
 
 - 实例对象(instance)的isa指向类对象（class）
 
