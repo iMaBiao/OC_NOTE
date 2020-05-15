@@ -285,6 +285,167 @@ static bool call_category_loads(void)
 
 
 
+##### 源码解读顺序
+
+```objective-c
+objc4源码解读过程
+objc-msg-arm64.s
+objc_msgSend
+
+objc-runtime-new.mm
+class_getInstanceMethod
+lookUpImpOrNil
+lookUpImpOrForward
+initializeAndLeaveLocked
+initializeAndMaybeRelock
+initializeNonMetaClass
+callInitialize
+objc_msgSend(cls, SEL_initialize)
+新版有改动（貌似增加了锁）
+```
+
+##### 源码介绍（有删减）
+
+```objective-c
+objc-runtime-new.mm
+
+//获取实例对象的方法
+Method class_getInstanceMethod(Class cls, SEL sel)
+{
+    if (!cls  ||  !sel) return nil;
+
+    // This deliberately avoids +initialize because it historically did so.
+
+    // This implementation is a bit weird because it's the only place that 
+    // wants a Method instead of an IMP.
+
+#warning fixme build and search caches
+        
+    // Search method lists, try method resolver, etc.
+    //查找方法的实现
+    lookUpImpOrNil(cls, sel, nil, 
+                   NO/*initialize*/, NO/*cache*/, YES/*resolver*/);
+
+#warning fixme build and search caches
+
+    return _class_getMethod(cls, sel);
+}
+
+
+IMP lookUpImpOrNil(Class cls, SEL sel, id inst, 
+                   bool initialize, bool cache, bool resolver)
+{
+    IMP imp = lookUpImpOrForward(cls, sel, inst, initialize, cache, resolver);
+    if (imp == _objc_msgForward_impcache) return nil;
+    else return imp;
+}
+
+
+IMP lookUpImpOrForward(Class cls, SEL sel, id inst, 
+                       bool initialize, bool cache, bool resolver)
+{
+    IMP imp = nil;
+    bool triedResolver = NO;
+
+    runtimeLock.assertUnlocked();
+
+    // Optimistic cache lookup
+    if (cache) {
+        imp = cache_getImp(cls, sel);
+        if (imp) return imp;
+    }
+
+  	//如果需要初始化 且 类并没有被初始化过
+    if (initialize && !cls->isInitialized()) {
+      
+        cls = initializeAndLeaveLocked(cls, inst, runtimeLock);
+    }
+	
+  	//初始化过就走正常的调用流程
+	  ...
+      
+    return imp;
+}
+
+
+// Locking: caller must hold runtimeLock; this may drop and re-acquire it
+static Class initializeAndLeaveLocked(Class cls, id obj, mutex_t& lock)
+{
+    return initializeAndMaybeRelock(cls, obj, lock, true);
+}
+
+static Class initializeAndMaybeRelock(Class cls, id inst,
+                                      mutex_t& lock, bool leaveLocked)
+{
+    lock.assertLocked();
+    assert(cls->isRealized());
+
+    if (cls->isInitialized()) {
+        if (!leaveLocked) lock.unlock();
+        return cls;
+    }
+
+		...
+      
+    // runtimeLock is now unlocked, for +initialize dispatch
+    assert(nonmeta->isRealized());
+    initializeNonMetaClass(nonmeta);
+
+    if (leaveLocked) runtimeLock.lock();
+    return cls;
+}
+
+
+void initializeNonMetaClass(Class cls)
+{
+    assert(!cls->isMetaClass());
+
+    Class supercls;
+    bool reallyInitialize = NO;
+
+    // Make sure super is done initializing BEFORE beginning to initialize cls.
+    // See note about deadlock above.
+    supercls = cls->superclass;
+  	//如果存在父类且父类并没有被初始化，就会去初始化父类（递归调用）
+    if (supercls  &&  !supercls->isInitialized()) {
+        initializeNonMetaClass(supercls);
+    }
+        
+    if (reallyInitialize) {
+        // We successfully set the CLS_INITIALIZING bit. Initialize the class.
+
+        // Exceptions: A +initialize call that throws an exception 
+        // is deemed to be a complete and successful +initialize.
+        //
+        // Only __OBJC2__ adds these handlers. !__OBJC2__ has a
+        // bootstrapping problem of this versus CF's call to
+        // objc_exception_set_functions().
+#if __OBJC2__
+        @try
+#endif
+        {
+          //调用initialize方法
+            callInitialize(cls);
+        }
+				...
+        return;
+    }
+    
+}
+
+
+//调用initialize方法（通过消息发送方式）
+void callInitialize(Class cls)
+{
+    ((void(*)(Class, SEL))objc_msgSend)(cls, SEL_initialize);
+    asm("");
+}
+```
+
+
+
+面试题：
+
 ##### category中有load方法吗？load方法什么时候调用？load方法能继承吗？
 
 有，能继承
@@ -293,7 +454,7 @@ static bool call_category_loads(void)
 
 
 
-- load、initialize方法的区别是什么？
+- #### load、initialize方法的区别是什么？
 
   1、调用方式
 
@@ -307,14 +468,24 @@ static bool call_category_loads(void)
       
       initialize是类第一次接收到消息的时候调用，每一个类只会initialize一次（父类的initialize方法可能会被调用多次）
 
-- load 、initialize的调用顺序？
+- #### load 、initialize的调用顺序？
 
   1、load :   
 
-  先调用类的load ；先编译的类，优先调用load；调用子类的load之前，会先调用父类的load
+  - 先调用类的load 
 
-  再调用分类的load, 先编译的分类，优先调用load
+    ​	先编译的类，优先调用load；
 
+    ​	调用子类的load之前，会先调用父类的load；
+
+  - 再调用分类的load
+  
+    ​	先编译的分类，优先调用load；
+  
+    
+  
   2、initialize
-
-  先初始化父类，再初始化子类（可能最终调用的是父类的initialize方法）
+  
+  - 先初始化父类
+  
+  - 再初始化子类（可能最终调用的是父类的initialize方法）

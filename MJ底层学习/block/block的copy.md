@@ -1,6 +1,6 @@
-##### block的copy
+### block的copy
 
-###### 在ARC环境下，编译器会根据情况自动将栈上的block复制到堆上，比如以下情况
+#### 在ARC环境下，编译器会根据情况自动将栈上的block复制到堆上，比如以下情况
 
 1、block作为函数返回值时
 2、将block赋值给__strong指针时
@@ -16,7 +16,9 @@ ARC下block属性的建议写法
 @property (copy, nonatomic) void (^block)(void);
 ```
 
-##### 对象类型的auto变量
+
+
+#### 对象类型的auto变量
 
 1、当block内部访问了对象类型的auto变量时，如果block是在栈上，将不会对auto变量产生强引用
 

@@ -1,6 +1,6 @@
 ##### block的修饰符
 
-##### --block
+#### --block
 
 ```
 __block可以用于解决block内部无法修改auto变量值的问题
@@ -22,7 +22,9 @@ __block不能修饰全局变量、静态变量（static）
 
 在`__Block`所起到的作用就是只要观察到该变量被 block 所持有之后，`age`其实变成了OC对象，里面含有`isa`指针
 
-##### __block的内存管理
+
+
+#### __block的内存管理
 
 1、_当block在栈上时，并不会对__block变量产生强引用
 
@@ -50,7 +52,7 @@ _Block_object_dispose函数会自动释放引用的__block变量（release)
 
 ![](img/block复制04.png)
 
-###### 在--block修饰的变量被包裹成OC对象后，内部的forward指针
+##### 在--block修饰的变量被包裹成OC对象后，内部的forward指针
 
 ```
 struct __Block_byref_age_0 {

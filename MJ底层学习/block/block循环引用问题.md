@@ -1,4 +1,6 @@
-##### block循环引用问题
+
+
+#### block循环引用问题
 
 在auto变量为OC对象的时候，在没有修饰符修饰的时候Block内部会强引用OC对象，而对象如果也持有Block的时候就会造成相互引用，也就是循环引用的问题。
 
@@ -11,7 +13,7 @@
 
 ![](img/block-循环引用01.png)
 
-```
+```objective-c
 __weak typeof(self) weakSelf = self;
 self.block = ^{
     printf("%p",weakSelf);
@@ -28,7 +30,7 @@ self.block = ^{
 
 ##### 还有一种方式：用__block解决（必须要调用block）
 
-```
+```objective-c
 __block id weakSelf = self;
 self.block = ^{
     printf("%p",weakSelf);
@@ -39,5 +41,9 @@ self.block();
 ```
 
 ![](img/block-循环引用03.png)
+
+
+
+weakSelf = nil就将对象置空，打破循环
 
 ![](img/block-循环引用04.png)
