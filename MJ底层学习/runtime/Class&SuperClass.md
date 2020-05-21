@@ -3,11 +3,24 @@
 
 
 ```objective-c
-NSLog(@"[self class] = %@",[self class]);
-NSLog(@"[super class] = %@",[super class]);
-NSLog(@"============");
-NSLog(@"[self superclass] = %@",[self superclass]);
-NSLog(@"[super superclass] = %@",[super superclass]);
+@interface Person : NSObject 
+@end
+
+@implementation Person
+ - (inst ancetype)init
+{
+  if(self = [super init]){
+    NSLog(@"[self class] = %@",[self class]);
+    // objc_msgSend(self , @selector(class))
+		NSLog(@"[super class] = %@",[super superClass]);
+		NSLog(@"============");
+		NSLog(@"[self superclass] = %@",[self superclass]);
+		NSLog(@"[super superclass] = %@",[super superclass]);
+  }
+}
+
+@end
+
 ```
 
 ![](img/class_superClass.png)

@@ -8,7 +8,7 @@
 
 但是从`arm64`之后，对`isa`进行了优化，变成了一个`共用体（union）`结构，还使用`位域`来存放跟多的信息。
 
-```
+```objective-c
 union isa_t {
     Class cls;
     uintptr_t bits;
