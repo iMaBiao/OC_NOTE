@@ -12,7 +12,7 @@
 
 一般来讲，一个线程一次只能执行一个任务，执行完成后线程就会退出。如果我们需要一个机制，让线程能随时处理事件但并不退出，通常的代码逻辑是这样的：
 
-```
+```objective-c
 function loop() {
     initialize();
     do {
@@ -40,7 +40,7 @@ CFRunLoopRef 的代码是[开源](http://opensource.apple.com/source/CF/CF-855.1
 
 苹果不允许直接创建 RunLoop，它只提供了两个自动获取的函数：CFRunLoopGetMain() 和 CFRunLoopGetCurrent()。 这两个函数内部的逻辑大概是下面这样:
 
-```
+```objective-c
 /// 全局的Dictionary，key 是 pthread_t， value 是 CFRunLoopRef
 static CFMutableDictionaryRef loopsDic;
 /// 访问 loopsDic 时的锁
@@ -114,7 +114,7 @@ Source有两个版本：Source0 和 Source1。
 
 **CFRunLoopObserverRef** 是观察者，每个 Observer 都包含了一个回调（函数指针），当 RunLoop 的状态发生变化时，观察者就能通过回调接受到这个变化。可以观测的时间点有以下几个：
 
-```
+```objective-c
 typedef CF_OPTIONS(CFOptionFlags, CFRunLoopActivity) {
     kCFRunLoopEntry         = (1UL << 0), // 即将进入Loop
     kCFRunLoopBeforeTimers  = (1UL << 1), // 即将处理 Timer
@@ -131,7 +131,7 @@ typedef CF_OPTIONS(CFOptionFlags, CFRunLoopActivity) {
 
 CFRunLoopMode 和 CFRunLoop 的结构大致如下：
 
-```
+```objective-c
 struct __CFRunLoopMode {
     CFStringRef _name;     // Mode Name, 例@"kCFRunLoopDefaultMode"
     CFMutableSetRef _sources0;    // Set
@@ -158,14 +158,14 @@ struct __CFRunLoop {
 
 CFRunLoop对外暴露的管理 Mode 接口只有下面2个:
 
-```
+```objective-c
 CFRunLoopAddCommonMode(CFRunLoopRef runloop, CFStringRef modeName);
 CFRunLoopRunInMode(CFStringRef modeName, ...);
 ```
 
 Mode 暴露的管理 mode item 的接口有下面几个：
 
-```
+```objective-c
 CFRunLoopAddSource(CFRunLoopRef rl, CFRunLoopSourceRef source, CFStringRef modeName);
 CFRunLoopAddObserver(CFRunLoopRef rl, CFRunLoopObserverRef observer, CFStringRef modeName);
 CFRunLoopAddTimer(CFRunLoopRef rl, CFRunLoopTimerRef timer, CFStringRef mode);
@@ -186,7 +186,7 @@ CFRunLoopRemoveTimer(CFRunLoopRef rl, CFRunLoopTimerRef timer, CFStringRef mode)
 
 其内部代码整理如下
 
-```
+```objective-c
 /// 用DefaultMode启动
 void CFRunLoopRun(void) {
     CFRunLoopRunSpecific(CFRunLoopGetCurrent(), kCFRunLoopDefaultMode, 1.0e10, false);
@@ -330,7 +330,7 @@ Mach 本身提供的 API 非常有限，而且苹果也不鼓励使用 Mach 的 
 
 首先我们可以看一下 App 启动后 RunLoop 的状态：
 
-```
+```objective-c
 CFRunLoop {
     current mode = kCFRunLoopDefaultMode
     common modes = {
@@ -450,7 +450,7 @@ CFRunLoop {
 
 当 RunLoop 进行回调时，一般都是通过一个很长的函数调用出去 (call out), 当你在你的代码中下断点调试时，通常能在调用栈上看到这些函数。下面是这几个函数的整理版本，如果你在调用栈中看到这些长函数名，在这里查找一下就能定位到具体的调用地点了：
 
-```
+```objective-c
 {
     /// 1. 通知Observers，即将进入RunLoop
     /// 此处有Observer会创建AutoreleasePool: _objc_autoreleasePoolPush();
@@ -539,7 +539,7 @@ _ZN2CA11Transaction17observer_callbackEP19__CFRunLoopObservermPv()。这个函�
 
 这个函数内部的调用栈大概是这样的：
 
-```
+```objective-c
 _ZN2CA11Transaction17observer_callbackEP19__CFRunLoopObservermPv()
     QuartzCore:CA::Transaction::observer_callback:
         CA::Transaction::commit();
@@ -623,7 +623,7 @@ NSURLConnectionLoader 中的 RunLoop 通过一些基于 mach port 的 Source 接
 
 [AFURLConnectionOperation](https://github.com/AFNetworking/AFNetworking/blob/master/AFNetworking%2FAFURLConnectionOperation.m) 这个类是基于 NSURLConnection 构建的，其希望能在后台线程接收 Delegate 回调。为此 AFNetworking 单独创建了一个线程，并在这个线程中启动了一个 RunLoop：
 
-```
+```objective-c
 + (void)networkRequestThreadEntryPoint:(id)__unused object {
     @autoreleasepool {
         [[NSThread currentThread] setName:@"AFNetworking"];
@@ -646,7 +646,7 @@ NSURLConnectionLoader 中的 RunLoop 通过一些基于 mach port 的 Source 接
 
 RunLoop 启动前内部必须要有至少一个 Timer/Observer/Source，所以 AFNetworking 在 [runLoop run] 之前先创建了一个新的 NSMachPort 添加进去了。通常情况下，调用者需要持有这个 NSMachPort (mach_port) 并在外部线程通过这个 port 发送消息到 loop 内；但此处添加 port 只是为了让 RunLoop 不至于退出，并没有用于实际的发送消息。
 
-```
+```objective-c
 - (void)start {
     [self.lock lock];
     if ([self isCancelled]) {

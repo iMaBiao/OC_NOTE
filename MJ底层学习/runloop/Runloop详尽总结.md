@@ -21,7 +21,7 @@ RunLoop和线程是息息相关的，我们知道线程的作用是用来执行�
 
 **主线程的RunLoop原理**
 
-```主线程的RunLoop原理
+```objective-c
 main.m
 int main(int argc, char * argv[]) {
     @autoreleasepool {
@@ -104,7 +104,7 @@ CFRunLoopTimerRef是定时源（RunLoop模型图中提到过），理解为基�
 
 演示下CFRunLoopModeRef和CFRunLoopTimerRef结合的使用用法，加深理解。
 
-```
+```objective-c
 1.新建一个iOS项目，在Main.storyboard中拖入一个Text View。
 2.在ViewController.m文件中加入以下代码
 
@@ -138,7 +138,7 @@ CFRunLoopTimerRef是定时源（RunLoop模型图中提到过），理解为基�
 
 当然可以，这就用到了我们之前说过的**伪模式（kCFRunLoopCommonModes）**，这其实不是一种真实的模式，而是一种标记模式，意思就是可以在打上Common Modes标记的模式下运行。
 
-```
+```objective-c
 具体做法就是讲添加语句改为
 [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
 
@@ -172,7 +172,7 @@ CFRunLoopObserverRef是观察者，用来监听RunLoop的状态改变
 
 CFRunLoopObserverRef可以监听的状态改变有以下几种：
 
-```
+```objective-c
 typedef CF_OPTIONS(CFOptionFlags, CFRunLoopActivity) {
     kCFRunLoopEntry = (1UL << 0),               // 即将进入Loop：1
     kCFRunLoopBeforeTimers = (1UL << 1),        // 即将处理Timer：2    
@@ -186,7 +186,7 @@ typedef CF_OPTIONS(CFOptionFlags, CFRunLoopActivity) {
 
 通过代码来监听下RunLoop中的状态改变
 
-```
+```objective-c
 - (void)viewDidLoad {
     [super viewDidLoad];
 
@@ -256,13 +256,13 @@ NSTimer的使用方法在讲解`CFRunLoopTimerRef`类的时候详细讲解过，
 
 利用`performSelector`方法为UIImageView调用`setImage:`方法，并利用`inModes`将其设置为RunLoop下NSDefaultRunLoopMode运行模式。代码如下：
 
-```
+```objective-c
 [self.imageView performSelector:@selector(setImage:) withObject:[UIImage imageNamed:@"tupian"] afterDelay:4.0 inModes:NSDefaultRunLoopMode];
 ```
 
 ##### 3. 后台常驻线程（很常用）
 
-```
+```objective-c
 - (void)viewDidLoad {
     [super viewDidLoad];
 
@@ -292,7 +292,7 @@ NSTimer的使用方法在讲解`CFRunLoopTimerRef`类的时候详细讲解过，
 
 那么，我们在touchesBegan中调用PerformSelector，从而实现在点击屏幕的时候调用run2方法。具体代码如下：
 
-```
+```objective-c
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {   
     // 利用performSelector，在self.thread的线程中调用run2方法执行任务
@@ -306,3 +306,15 @@ NSTimer的使用方法在讲解`CFRunLoopTimerRef`类的时候详细讲解过，
 ```
 
 经过运行测试，除了之前打印的**——run1——-**，每当我们点击屏幕，都能调用**——run2———**。
+
+补充：
+
+4. ##### 自动释放池
+
+Timer和Source也是一些变量，需要占用一部分存储空间，所以要释放掉，如果不释放掉，就会一直积累，占用的内存也就越来越大，这显然不是我们想要的。
+
+那么什么时候释放，怎么释放呢？
+
+ RunLoop内部有一个自动释放池，**当RunLoop开启时，就会自动创建一个自动释放池，当RunLoop在休息之前会释放掉自动释放池的东西，然后重新创建一个新的空的自动释放池**，当RunLoop被唤醒重新开始跑圈时，Timer,Source等新的事件就会放到新的自动释放池中，**当RunLoop退出的时候也会被释放**。
+ 注意：只有主线程的RunLoop会默认启动。也就意味着会自动创建自动释放池，子线程需要在线程调度方法中手动添加自动释放池。
+

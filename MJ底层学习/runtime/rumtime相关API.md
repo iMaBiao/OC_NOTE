@@ -130,20 +130,19 @@ free(ivars);
 2、方法实现相关操作 - IMP class_getMethodImplementation(Class cls, SEL name) - IMP method_setImplementation(Method m, IMP imp) - void method_exchangeImplementations(Method m1, Method m2)
 
 3、拷贝方法列表（最后需要调用free释放）
-
 Method *class_copyMethodList(Class cls, unsigned int *outCount)
+  
 4、动态添加方法
-
 BOOL class_addMethod(Class cls, SEL name, IMP imp, const char *types)
+  
 5、动态替换方法
-
 IMP class_replaceMethod(Class cls, SEL name, IMP imp, const char *types)
+  
 6、选择器相关
-
 const char *sel_getName(SEL sel)
 SEL sel_registerName(const char *str)
+  
 7、用block作为方法实现
-
 IMP imp_implementationWithBlock(id block)
 id imp_getBlock(IMP anImp)
 BOOL imp_removeBlock(IMP anImp)
