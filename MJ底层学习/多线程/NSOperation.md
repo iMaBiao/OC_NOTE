@@ -88,7 +88,7 @@ NSOperation 是个抽象类，不能用来封装操作。我们只有使用它�
 
 ###### 使用子类  `NSInvocationOperation`
 
-```
+```objective-c
 /**
  * 使用子类 NSInvocationOperation
  */
@@ -117,7 +117,7 @@ NSOperation 是个抽象类，不能用来封装操作。我们只有使用它�
 
 ##### 如果在其他线程中执行操作，则打印结果为其他线程。
 
-```
+```objective-c
 // 在其他线程使用子类 NSInvocationOperation
 [NSThread detachNewThreadSelector:@selector(useInvocationOperation) toTarget:self withObject:nil];
 
@@ -130,7 +130,7 @@ NSOperation 是个抽象类，不能用来封装操作。我们只有使用它�
 
 ##### 使用子类  `NSBlockOperation`
 
-```
+```objective-c
 /**
  * 使用子类 NSBlockOperation
  */
@@ -161,7 +161,7 @@ NSOperation 是个抽象类，不能用来封装操作。我们只有使用它�
 
 如果添加的操作多的话，`blockOperationWithBlock:` 中的操作也可能会在其他线程（非当前线程）中执行，这是由系统决定的，并不是说添加到 `blockOperationWithBlock:` 中的操作一定会在当前线程中执行。（可以使用 `addExecutionBlock:` 多添加几个操作试试）。
 
-```
+```objective-c
 /**
  * 使用子类 NSBlockOperation
  * 调用方法 AddExecutionBlock:
@@ -255,7 +255,7 @@ NSOperation 是个抽象类，不能用来封装操作。我们只有使用它�
 
 重写`main`方法比较简单，我们不需要管理操作的状态属性 `isExecuting` 和 `isFinished`。当 `main` 执行完返回的时候，这个操作就结束了。
 
-```
+```objective-c
 先定义一个继承自 NSOperation 的子类，重写main方法。
 
 #import <Foundation/Foundation.h>
@@ -278,7 +278,7 @@ NSOperation 是个抽象类，不能用来封装操作。我们只有使用它�
 @end
 ```
 
-```
+```objective-c
 然后使用的时候导入头文件YSCOperation.h。
 /**
  * 使用自定义继承自 NSOperation 的子类
@@ -305,8 +305,8 @@ NSOperationQueue 一共有两种队列：主队列、自定义队列。其中自
 
 - 凡是添加到主队列中的操作，都会放到主线程中执行。
   
-  ```
-  / 主队列获取方法
+  ```objective-c
+  // 主队列获取方法
   NSOperationQueue *queue = [NSOperationQueue mainQueue];
   ```
 
@@ -316,7 +316,7 @@ NSOperationQueue 一共有两种队列：主队列、自定义队列。其中自
 
 - 同时包含了：串行、并发功能。
   
-  ```
+  ```objective-c
   // 自定义队列创建方法
   NSOperationQueue *queue = [[NSOperationQueue alloc] init];
   ```
@@ -327,7 +327,7 @@ NSOperationQueue 一共有两种队列：主队列、自定义队列。其中自
 
 - 需要先创建操作，再将创建好的操作加入到创建好的队列中去。
 
-```
+```objective-c
 /*** 使用 addOperation: 将操作加入到操作队列中 */
 - (void)addOperationToQueue {
 
@@ -378,7 +378,7 @@ NSOperationQueue 一共有两种队列：主队列、自定义队列。其中自
 
 - 无需先创建操作，在 block 中添加操作，直接将包含操作的 block 加入到队列中。
 
-```
+```objective-c
 /**
  * 使用 addOperationWithBlock: 将操作加入到操作队列中
  */

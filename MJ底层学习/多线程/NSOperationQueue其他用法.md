@@ -12,7 +12,7 @@
 - `maxConcurrentOperationCount` 为1时，队列为串行队列。只能串行执行。
 - `maxConcurrentOperationCount` 大于1时，队列为并发队列。操作并发执行，当然这个值不应超过系统限制，即使自己设置一个很大的值，系统也会自动调整为 min{自己设定的值，系统设定的默认最大值}。
 
-```
+```objective-c
 /**
  * 设置 MaxConcurrentOperationCount（最大并发操作数）
  */
@@ -86,7 +86,7 @@
 - `- (void)removeDependency:(NSOperation *)op;` 移除依赖，取消当前操作对操作 op 的依赖。
 - `@property (readonly, copy) NSArray<NSOperation *> *dependencies;` 在当前操作开始执行之前完成执行的所有操作对象数组。
 
-```
+```objective-c
 /**
  * 操作依赖
  * 使用方法：addDependency:
@@ -161,7 +161,7 @@ typedef NS_ENUM(NSInteger, NSOperationQueuePriority) {
 
 #### NSOperation、NSOperationQueue 线程间的通信
 
-```
+```objective-c
 /**
  * 线程间通信
  */
@@ -212,7 +212,7 @@ iOS 实现线程加锁有很多种方式。@synchronized、 NSLock、NSRecursive
 
 这里我们使用 NSLock 对象来解决线程同步问题。NSLock 对象可以通过进入锁时调用 lock 方法，解锁时调用 unlock 方法来保证线程安全。
 
-```
+```objective-c
 /**
  * 线程安全：使用 NSLock 加锁
  * 初始化火车票数量、卖票窗口(线程安全)、并开始卖票

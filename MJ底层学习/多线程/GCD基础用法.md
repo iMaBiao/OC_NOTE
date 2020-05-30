@@ -15,11 +15,11 @@
 
 #### 1.什么是 GCD？
 
-```
+```objective-c
 Grand Central Dispatch（GCD） 是 Apple 开发的一个多核编程的较新的解决方法。它主要用于优化应用程序以支持多核处理器以及其他对称多处理系统。它是一个在线程池模式的基础上执行的并发任务。在 Mac OS X 10.6 雪豹中首次推出，也可在 iOS 4 及以上版本使用。
 ```
 
-```
+```objective-c
 因为使用 GCD 有很多好处啊，具体如下：
 
 GCD 可用于多核的并行运算；
@@ -55,7 +55,7 @@ GCD 拥有以上这么多的好处，而且在多线程中处于举足轻重的�
 
 在 GCD 中有两种队列：**『串行队列』** 和 **『并发队列』**。两者都符合 FIFO（先进先出）的原则。两者的主要区别是：**执行顺序不同，以及开启线程数不同。**
 
-```
+```objective-c
 串行队列（Serial Dispatch Queue）：
 每次只有一个任务被执行。让任务一个接着一个地执行。（只开启一个线程，一个任务执行完毕后，再执行下一个任务）
 
@@ -81,7 +81,7 @@ GCD 的使用步骤其实很简单，只有两步：
 - 第一个参数表示队列的唯一标识符，用于 DEBUG，可为空。队列的名称推荐使用应用程序 ID 这种逆序全程域名。
 - 第二个参数用来识别是串行队列还是并发队列。`DISPATCH_QUEUE_SERIAL`  表示串行队列，`DISPATCH_QUEUE_CONCURRENT`  表示并发队列。
 
-```
+```objective-c
 // 串行队列的创建方法
 dispatch_queue_t queue = dispatch_queue_create("net.bujige.testQueue", DISPATCH_QUEUE_SERIAL);
 
@@ -94,7 +94,7 @@ dispatch_queue_t queue = dispatch_queue_create("net.bujige.testQueue", DISPATCH_
 - 所有放在主队列中的任务，都会放到主线程中执行。
 - 可使用  `dispatch_get_main_queue()`  方法获得主队列。
 
-```
+```objective-c
 // 主队列的获取方法
 dispatch_queue_t queue = dispatch_get_main_queue();
 ```
@@ -103,14 +103,14 @@ dispatch_queue_t queue = dispatch_get_main_queue();
 
 - 可以使用  `dispatch_get_global_queue`  方法来获取全局并发队列。需要传入两个参数。第一个参数表示队列优先级，一般用  `DISPATCH_QUEUE_PRIORITY_DEFAULT`。第二个参数暂时没用，用  `0`  即可。
 
-```
-/ 全局并发队列的获取方法
+```objective-c
+// 全局并发队列的获取方法
 dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
 ```
 
 ##### 3.2 任务的创建方法
 
-```
+```objective-c
 GCD 提供了同步执行任务的创建方法 dispatch_sync 和异步执行任务创建方法 dispatch_async。
 
 // 同步执行任务创建方法
@@ -142,7 +142,7 @@ dispatch_async(queue, ^{
 
 ![](img/pic4.png)
 
-```
+```objective-c
 dispatch_queue_t queue = dispatch_queue_create("test.queue", DISPATCH_QUEUE_SERIAL);
 dispatch_async(queue, ^{    // 异步执行 + 串行队列
     dispatch_sync(queue, ^{  // 同步执行 + 当前串行队列
@@ -159,7 +159,7 @@ dispatch_async(queue, ^{    // 异步执行 + 串行队列
 
 ##### 4.1 同步执行 + 并发队列
 
-```
+```objective-c
 /**
  * 同步执行 + 并发队列
  * 特点：在当前线程中执行任务，不会开启新线程，执行完一个任务，再执行下一个任务。
@@ -200,7 +200,7 @@ dispatch_async(queue, ^{    // 异步执行 + 串行队列
 [16332:4171500] syncConcurrent—-end
 ```
 
-```
+```objective-c
 从 同步执行 + 并发队列 中可看到：
 
 所有任务都是在当前线程（主线程）中执行的，没有开启新的线程（同步执行不具备开启新线程的能力）。
@@ -215,7 +215,7 @@ dispatch_async(queue, ^{    // 异步执行 + 串行队列
 
 ##### 4.2 异步执行 + 并发队列
 
-```
+```objective-c
 /**
  * 异步执行 + 并发队列
  * 特点：可以开启多个线程，任务交替（同时）执行。
@@ -255,7 +255,7 @@ dispatch_async(queue, ^{    // 异步执行 + 串行队列
 [17232:4187203] 1—-{number = 4, name = (null)}
 ```
 
-```
+```objective-c
 在 异步执行 + 并发队列 中可以看出：
 
 除了当前线程（主线程），系统又开启了 3 个线程，并且任务是交替/同时执行的。（异步执行 具备开启新线程的能力。且 并发队列 可开启多个线程，同时执行多个任务）。
@@ -266,7 +266,7 @@ dispatch_async(queue, ^{    // 异步执行 + 串行队列
 
 ##### 4.3 同步执行 + 串行队列
 
-```
+```objective-c
 /**
  * 同步执行 + 串行队列
  * 特点：不会开启新线程，在当前线程执行任务。任务是串行的，执行完一个任务，再执行下一个任务。
@@ -305,7 +305,7 @@ dispatch_async(queue, ^{    // 异步执行 + 串行队列
 [17285:4197645] syncSerial—-end
 ```
 
-```
+```objective-c
 在 同步执行 + 串行队列 可以看到：
 
 所有任务都是在当前线程（主线程）中执行的，并没有开启新的线程（同步执行 不具备开启新线程的能力）。
@@ -315,7 +315,7 @@ dispatch_async(queue, ^{    // 异步执行 + 串行队列
 
 ##### 4.4 异步执行 + 串行队列
 
-```
+```objective-c
 /**
  * 异步执行 + 串行队列
  * 特点：会开启新线程，但是因为任务是串行的，执行完一个任务，再执行下一个任务。
@@ -354,7 +354,7 @@ dispatch_async(queue, ^{    // 异步执行 + 串行队列
 [17313:4203079] 3—-{number = 3, name = (null)}
 ```
 
-```
+```objective-c
 在 异步执行 + 串行队列 可以看到：
 
 开启了一条新线程（异步执行 具备开启新线程的能力，串行队列 只开启一个线程）。
@@ -368,7 +368,7 @@ dispatch_async(queue, ^{    // 异步执行 + 串行队列
 
 ###### 4.5.1 在主线程中调用 『同步执行 + 主队列』
 
-```
+```objective-c
 /**
  * 同步执行 + 主队列
  * 特点(主线程调用)：互等卡主不执行。
@@ -408,7 +408,7 @@ dispatch_async(queue, ^{    // 异步执行 + 串行队列
 (lldb)
 ```
 
-```
+```objective-c
 在主线程中使用 同步执行 + 主队列 可以惊奇的发现：
 
 追加到主线程的任务 1、任务 2、任务 3 都不再执行了，而且 syncMain---end 也没有打印，在 XCode 9 及以上版本上还会直接报崩溃。这是为什么呢？
@@ -420,7 +420,7 @@ dispatch_async(queue, ^{    // 异步执行 + 串行队列
 
 ###### 4.5.2 在其他线程中调用『同步执行 + 主队列』
 
-```
+```objective-c
 // 使用 NSThread 的 detachNewThreadSelector 方法会创建线程，并自动启动线程执行 selector 任务
 [NSThread detachNewThreadSelector:@selector(syncMain) toTarget:self withObject:nil];
 
@@ -433,7 +433,7 @@ dispatch_async(queue, ^{    // 异步执行 + 串行队列
 [17482:4237818] syncMain—-end
 ```
 
-```
+```objective-c
 在其他线程中使用 同步执行 + 主队列 可看到：
 
 所有任务都是在主线程（非当前线程）中执行的，没有开启新的线程（所有放在主队列中的任务，都会放到主线程中执行）。
@@ -448,7 +448,7 @@ syncMain 任务 在其他线程中执行到追加 任务 1 到主队列中，因
 
 ##### 4.6 异步执行 + 主队列
 
-```
+```objective-c
 /**
  * 异步执行 + 主队列
  * 特点：只在主线程中执行任务，执行完一个任务，再执行下一个任务
@@ -489,7 +489,7 @@ syncMain 任务 在其他线程中执行到追加 任务 1 到主队列中，因
 [17521:4243690] 3—-{number = 1, name = main}
 ```
 
-```
+```objective-c
 在 异步执行 + 主队列 可以看到：
 
 所有任务都是在当前线程（主线程）中执行的，并没有开启新的线程（虽然 异步执行 具备开启线程的能力，但因为是主队列，所以所有任务都在主线程中）。
@@ -499,7 +499,7 @@ syncMain 任务 在其他线程中执行到追加 任务 1 到主队列中，因
 
 ### 5. GCD 线程间的通信
 
-```
+```objective-c
 /**
  * 线程间通信
  */

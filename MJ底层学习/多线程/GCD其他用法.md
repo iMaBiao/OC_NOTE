@@ -8,10 +8,8 @@
 
 `dispatch_barrier_async` 方法会等待前边追加到并发队列中的任务全部执行完毕之后，再将指定的任务追加到该异步队列中。然后在 `dispatch_barrier_async` 方法追加的任务执行完毕之后，异步队列才恢复为一般动作，接着追加任务到该异步队列并开始执行。具体如下图所示：
 
-```
-/**
- * 栅栏方法 dispatch_barrier_async
- */
+```objective-c
+/** 栅栏方法 dispatch_barrier_async */
 - (void)barrier {
     dispatch_queue_t queue = dispatch_queue_create("net.bujige.testQueue", DISPATCH_QUEUE_CONCURRENT);
 
@@ -52,7 +50,7 @@
 [17648:4262933] 3—-{number = 3, name = (null)}
 ```
 
-```
+```objective-c
 在 dispatch_barrier_async 执行结果中可以看出：
 
 在执行完栅栏前面的操作之后，才执行栅栏操作，最后再执行栅栏后边的操作。
@@ -60,7 +58,7 @@
 
 ##### 6.2 GCD 延时执行方法：dispatch_after
 
-```
+```objective-c
 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         // 2.0 秒后异步追加任务代码到主队列，并开始执行
         NSLog(@"after---%@",[NSThread currentThread]);  
@@ -73,7 +71,7 @@ dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), 
 
 使用 `dispatch_once` 方法能保证某段代码在程序运行过程中只被执行 1 次，并且即使在多线程的环境下，`dispatch_once` 也可以保证线程安全。
 
-```
+```objective-c
 - (void)once {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -94,7 +92,7 @@ dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), 
 
 还有一点，无论是在串行队列，还是并发队列中，dispatch_apply 都会等待全部任务执行完毕，这点就像是同步操作，也像是队列组中的 `dispatch_group_wait`方法。
 
-```
+```objective-c
 - (void)apply {
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
 
@@ -126,13 +124,13 @@ dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), 
 
 - 调用队列组的  `dispatch_group_notify`  回到指定线程执行任务。或者使用  `dispatch_group_wait`  回到当前线程继续向下执行（会阻塞当前线程）。
 
-##### 
+
 
 ##### 6.5.1 dispatch_group_notify
 
 监听 group 中任务的完成状态，当所有的任务都执行完成后，追加任务到 group 中，并执行任务
 
-```
+```objective-c
 - (void)groupNotify {
     NSLog(@"currentThread---%@",[NSThread currentThread]);  
     NSLog(@"group---begin");
@@ -176,7 +174,7 @@ dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), 
 
 暂停当前线程（阻塞当前线程），等待指定的 group 中的任务执行完成后，才会往下继续执行。
 
-```
+```objective-c
 - (void)groupWait {
     NSLog(@"currentThread---%@",[NSThread currentThread]); 
     NSLog(@"group---begin");
@@ -219,7 +217,7 @@ dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), 
 - `dispatch_group_leave`  标志着一个任务离开了 group，执行一次，相当于 group 中未执行完毕任务数 -1。
 - 当 group 中未执行完毕任务数为0的时候，才会使  `dispatch_group_wait`  解除阻塞，以及执行追加到  `dispatch_group_notify`  中的任务。
 
-```
+```objective-c
 - (void)groupEnterAndLeave {
     NSLog(@"currentThread---%@",[NSThread currentThread]);  
     NSLog(@"group---begin");
@@ -287,7 +285,7 @@ Dispatch Semaphore 在实际开发中主要用于：
 
 需求：异步执行耗时任务，并使用异步执行的结果进行一些额外的操作。换句话说，相当于，将将异步执行任务转换为同步执行任务。
 
-```
+```objective-c
 /**
  * semaphore 线程同步
  */
@@ -345,7 +343,7 @@ Dispatch Semaphore 在实际开发中主要用于：
 
 下面，我们模拟火车票售卖的方式，实现 NSThread 线程安全和解决线程同步问题。
 
-```
+```objective-c
 /**
  * 线程安全：使用 semaphore 加锁
  * 初始化火车票数量、卖票窗口（线程安全）、并开始卖票

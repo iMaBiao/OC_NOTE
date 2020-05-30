@@ -42,7 +42,7 @@ NSThread的创建与运行
 
 ###### 常见API
 
-```
+```objective-c
 // 获得主线程
 + (NSThread *)mainThread;    
 
@@ -64,7 +64,7 @@ NSThread *current = [NSThread currentThread];
 
 
 
-```
+```objective-c
 线程状态控制方法
 
 // 线程进入就绪状态 -> 运行状态。当线程任务执行完毕，自动进入死亡状态
