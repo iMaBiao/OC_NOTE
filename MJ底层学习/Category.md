@@ -4,6 +4,10 @@
 
 ![](img/category_t.png)
 
+![](https://i.postimg.cc/sfB3jwh2/category-t.png)
+
+
+
 #### Category的加载处理过程
 
 1、通过Runtime加载某个类的所有Category数据
