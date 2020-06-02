@@ -16,7 +16,7 @@
 
 
 
-```
+```objective-c
 int a = 10;
 int b;
 int main(int argc, char * argv[]) {
@@ -66,7 +66,7 @@ obj = 0x608000012210 // 堆
 
 
 
-```
+```objective-c
 int main(int argc, const char * argv[]) {
 @autoreleasepool {
 
@@ -83,7 +83,7 @@ int main(int argc, const char * argv[]) {
 
 
 
-```
+```objective-c
 思考：这两段代码打印结果有什么区别？
 
 dispatch_queue_t queue = dispatch_get_global_queue(0, 0);
@@ -105,7 +105,7 @@ dispatch_queue_t queue = dispatch_get_global_queue(0, 0);
 
 
 
-```
+```objective-c
 NSString *str1 = [NSString stringWithFormat:@"abc"];
 NSString *str2 = [NSString stringWithFormat:@"abcdefghijk"];
 NSLog(@"\n[str1 class]=%@\n[str2 class]=%@",[str1 class],[str2 class]);

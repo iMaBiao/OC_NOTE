@@ -2,14 +2,14 @@
 
 
 
-```
+```objective-c
 @property (nonatomic,copy) NSString *name;
 
 ```
 
 **nonatomic内部实现**
 
-```
+```objective-c
 //mrc 环境
 //implementation
 @synthesize name = _name;
@@ -38,7 +38,7 @@
 
 系统生成的getter/setter方法会进行加锁操作,注意:这个锁仅仅保证了getter和setter存取方法的线程安全.
 
-```
+```objective-c
 //mrc 环境
 //implementation
 @synthesize name = _name;

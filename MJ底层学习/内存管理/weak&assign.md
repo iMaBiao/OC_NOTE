@@ -16,7 +16,7 @@ weak 的实现原理可以概括一下三步：
 
 - 3、释放时，调用clearDeallocating函数。clearDeallocating函数首先根据对象地址获取所有weak指针地址的数组，然后遍历这个数组把其中的数据设为nil，最后把这个entry从weak表中删除，最后清理对象的记录。
 
-```
+```objective-c
 NSObject.mm文件中,有一个objc_initWeak方法，这个就是weak初始化函数
 
 objc_initWeak(id *location, id newObj)
@@ -31,7 +31,7 @@ objc_initWeak(id *location, id newObj)
 }
 ```
 
-```
+```objective-c
 更新指针指向，创建对应的弱引用表
 
 我们storeWeak表面意思是weak商店,其实weak应该就是在storeWeak函数里面进行了进一步的处理。点击进入
@@ -137,7 +137,7 @@ struct SideTable {
 
 我们是研究`weak`的，所以我们要研究一下`weak_table_t`这个hash表
 
-```
+```objective-c
 struct weak_table_t {
     weak_entry_t *weak_entries;
     size_t    num_entries;
@@ -184,7 +184,7 @@ objc_clear_deallocating该函数的动作如下：
 - 3、将weak表中该记录删除
 - 4、从引用计数表中删除废弃对象的地址为键值的记录
 
-```
+```objective-c
 objc_object::clearDeallocating_slow()
 {
     assert(isa.nonpointer  &&  (isa.weakly_referenced || isa.has_sidetable_rc));
@@ -203,7 +203,7 @@ objc_object::clearDeallocating_slow()
 
 `clearDeallocating_slow`中首先是找到`weak表中获取废弃对象的地址为键值的记录`，然后调用`weak_clear_no_lock`函数进行清除操作
 
-```
+```objective-c
 void 
 weak_clear_no_lock(weak_table_t *weak_table, id referent_id) 
 {

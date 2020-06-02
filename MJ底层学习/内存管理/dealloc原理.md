@@ -2,7 +2,7 @@
 
 在`NSObject.mm`可以查找到`dealloc`函数
 
-```
+```objective-c
 - (void)dealloc {
     _objc_rootDealloc(self);
 }
@@ -28,7 +28,7 @@ objc_object::rootDealloc()
 - 1、首先判断对象是不是`isTaggedPointer`，如果是`TaggedPointer`那么没有采用引用计数技术，所以直接return
 - 2、不是`TaggedPointer`，就去销毁这个对象`object_dispose`
 
-```
+```objective-c
 点击object_dispose
 id 
 object_dispose(id obj)

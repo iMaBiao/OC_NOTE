@@ -16,9 +16,9 @@
 
 
 
-NSString & NSMutableString
+#### NSString & NSMutableString
 
-```
+```objective-c
 对不可变字符串进行copy&mutableCopy操作
 
 void test1()
@@ -30,9 +30,10 @@ void test1()
 }
 
 根据打印的地址可以看出不可变字符串在copy时是浅拷贝，只拷贝了指针没有拷贝对象；mutableCopy则是深拷贝，产生了新的对象
+补充： 如果str1的字符串比较短，有可能会采用TaggedPointer，不会是对象类型 
 ```
 
-```
+```objective-c
 对可变字符串进行copy&mutableCopy操作
 
 void test2()
@@ -48,9 +49,9 @@ void test2()
 
 
 
-NSArray & NSMutableArray
+#### NSArray & NSMutableArray
 
-```
+```objective-c
 对不可变数组进行copy&mutableCopy操作
 void test3()
 {
@@ -64,7 +65,7 @@ void test3()
 根据打印的地址可以看出不可变数组在copy时是浅拷贝，只拷贝了指针没有拷贝对象；mutableCopy则是深拷贝，产生了新的对象
 ```
 
-```
+```objective-c
 对可变数组进行copy&mutableCopy操作
 
 void test4()
@@ -81,9 +82,9 @@ void test4()
 
 
 
-NSDictionary & NSMutableDictionary
+#### NSDictionary & NSMutableDictionary
 
-```
+```objective-c
 对不可变字典进行copy&mutableCopy操作
 void test5()
 {
@@ -97,7 +98,7 @@ void test5()
 根据打印的地址可以看出不可变字典在copy时是浅拷贝，只拷贝了指针没有拷贝对象；mutableCopy则是深拷贝，产生了新的对象
 ```
 
-```
+```objective-c
 对可变字典进行copy&mutableCopy
 void test6()
 {
@@ -124,7 +125,7 @@ void test6()
 
 
 
-```
+```objective-c
 @interface Dog : NSObject<NSCopying>
 @property (nonatomic,assign) int age;
 @property (nonatomic,copy) NSString *name;
@@ -147,11 +148,15 @@ void test6()
 
 
 
+#### 总结：
+
+![](img/copy01.png)
+
+
+
 #### Strong
 
-
-
-```
+```objective-c
 @property (strong, nonatomic) NSString *strStrong;
 @property (copy, nonatomic) NSString *strCopy;
 
@@ -186,7 +191,7 @@ self.strCopy,self.strCopy,&_strCopy);
 
 
 
-```
+```objective-c
 可变字符串
 NSMutableString *str = [[NSMutableString alloc] initWithString:@"abc"];
 self.strCopy = str;
@@ -208,3 +213,6 @@ self.strCopy,self.strCopy,&_strCopy);
 ```
 
 **在实际开发中，不希望源数据改变影响到属性中的值，使用copy来申明。**
+
+
+
