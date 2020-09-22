@@ -28,10 +28,12 @@
 
 
 
-通过KVC会触发KVO吗？
+###### 通过KVC会触发KVO吗？
 
 会
 
 
 
 
+
+[iOS KVC底层原理、应用场景](https://blog.csdn.net/qq_27909209/article/details/81106631)
