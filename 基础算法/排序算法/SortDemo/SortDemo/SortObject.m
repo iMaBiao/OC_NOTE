@@ -45,6 +45,24 @@
     NSLog(@"%s-- %@",__func__,array);
 }
 
+- (void)bubbleSort3:(NSMutableArray *)array
+{
+    //记录大值的索引，大值后面的元素就不需要再遍历了；针对有序的数组效率较高
+    for (NSUInteger end = array.count-1; end>0; end--) {
+        NSUInteger sortIndex = 1;
+        for (int begin = 1; begin<= end; begin++) {
+            if ([array[begin]intValue] < [array[begin-1] intValue]) {
+                int temp = [array[begin]intValue];
+                array[begin] = array[begin-1];
+                array[begin-1] = @(temp);
+                sortIndex = begin;
+            }
+        }
+        sortIndex = end;
+    }
+    
+    NSLog(@"%s-- %@",__func__,array);
+}
 
 ///选择排序
 - (void)selectionSort:(NSMutableArray *)array

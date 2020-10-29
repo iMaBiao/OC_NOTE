@@ -13,10 +13,11 @@ NS_ASSUME_NONNULL_BEGIN
 @interface SortObject : NSObject
 
 ///冒泡排序
-- (void)bubbleSort1:(NSArray *)array;
-- (void)bubbleSort2:(NSArray *)array;
+- (void)bubbleSort1:(NSMutableArray *)array;
+- (void)bubbleSort2:(NSMutableArray *)array;
+- (void)bubbleSort3:(NSMutableArray *)array;
 ///选择排序
-- (void)selectionSort:(NSArray *)array;
+- (void)selectionSort:(NSMutableArray *)array;
 
 @end
 

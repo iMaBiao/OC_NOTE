@@ -18,9 +18,10 @@ int main(int argc, const char * argv[]) {
         //冒泡
 //        [sortObj bubbleSort1:array];
 //        [sortObj bubbleSort2:array];
+        [sortObj bubbleSort3:array];
         
         //选择
-        [sortObj selectionSort:array];
+//        [sortObj selectionSort:array];
         
     }
     return 0;
