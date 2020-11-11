@@ -18,6 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)bubbleSort3:(NSMutableArray *)array;
 ///选择排序
 - (void)selectionSort:(NSMutableArray *)array;
+///插入排序
+- (void)insertionSort:(NSMutableArray *)array;
 
 @end
 
