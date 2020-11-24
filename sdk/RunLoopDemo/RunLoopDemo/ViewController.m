@@ -24,7 +24,7 @@
         
         [self performSelector:@selector(test) withObject:nil afterDelay:.0];
 //
-//        [[NSRunLoop currentRunLoop]addPort:[[NSPort alloc]init] forMode:NSDefaultRunLoopMode];
+        [[NSRunLoop currentRunLoop]addPort:[[NSPort alloc]init] forMode:NSDefaultRunLoopMode];
 //        [[NSRunLoop currentRunLoop]runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
         
         NSLog(@"3");
