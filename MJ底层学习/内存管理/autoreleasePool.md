@@ -394,3 +394,17 @@ typedef CF_OPTIONS(CFOptionFlags, CFRunLoopActivity) {
 `autoreleased 对象是在 runloop 的即将进入休眠时进行释放的`
 
 
+
+
+
+
+
+总结：
+
+>自动释放池autorelease是一个以`AutoreleasePoolPage为页`，进行分页管理的`双向链表`；页的数据结构是`AutoreleasePoolPageData`；每一个autoreleasepool对象只有一个`哨兵`，哨兵放在`第一页`中；每一页的大小为`4096`字节；每一页的`前56个字节`存储页的AutoreleasePoolPageData结构体数据；第一页的第56往后8个字节存储哨兵，后面存储autorelease对象，总共可以存储`504`个；从第二页开始，每页可以存储`505`个对象；`objc_autoreleasepoolpush`是一个查找child，递增next，创建新页的过程；`objc_autoreleasepoolpop`是一个查找parent，递减next，释放对象，销毁page的过程，`遇到哨兵`对象即停止。
+>
+>
+>作者：形影相吊
+>链接：https://juejin.cn/post/6900043544304713735
+
+
