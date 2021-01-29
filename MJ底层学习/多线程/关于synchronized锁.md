@@ -237,6 +237,10 @@ static SyncData* id2data(id object, enum usage why)
     lockp->lock();
 
     {
+    //  首先进行加锁；
+		//	遍历整个链表，打到尾结点；
+		//	如果没有找到尾结点，将objcet的数据记录到result中;
+		//	最后goto done.
         SyncData* p;
         SyncData* firstUnused = NULL;
         for (p = *listp; p != NULL; p = p->nextData) {
@@ -267,6 +271,8 @@ static SyncData* id2data(id object, enum usage why)
     // XXX allocating memory with a global lock held is bad practice,
     // might be worth releasing the lock, allocating, and searching again.
     // But since we never free these guys we won't be stuck in allocation very often.
+  
+  	//创建一个新的SyncData并保存到list中,threadCount=1。
     posix_memalign((void **)&result, alignof(SyncData), sizeof(SyncData));
     result->object = (objc_object *)object;
     result->threadCount = 1;
@@ -274,7 +280,7 @@ static SyncData* id2data(id object, enum usage why)
     result->nextData = *listp;
     *listp = result;
     
- done:
+ done:	//将上面步骤得到的result存到暂存和缓存中,并返回result。
     lockp->unlock();
     if (result) {
         // Only new ACQUIRE should get here.
