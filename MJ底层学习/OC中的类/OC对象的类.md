@@ -87,6 +87,8 @@ BOOL isMetaClass = class_isMetaCLass(objMetaClass)
 
 - instance调用对象方法的轨迹：isa找到类对象class,方法不存在，就通过superclass找父类
 
+
+
 对象的isa指向哪里？
 
 instance对象的isa指向class对象
@@ -94,6 +96,8 @@ instance对象的isa指向class对象
 class 对象的isa指向meta-class对象
 
 meta-class对象的isa指向基类的meta-class对象
+
+
 
 OC的类信息存放在哪里？
 

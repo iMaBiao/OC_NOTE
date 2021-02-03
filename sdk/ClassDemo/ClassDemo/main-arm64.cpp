@@ -34192,18 +34192,28 @@ struct NSUUID_IMPL {
 #pragma clang assume_nonnull end
 
 
-#ifndef _REWRITER_typedef_Person
-#define _REWRITER_typedef_Person
-typedef struct objc_object Person;
-typedef struct {} _objc_exc_Person;
+
+
+
+
+#ifndef _REWRITER_typedef_Cat
+#define _REWRITER_typedef_Cat
+typedef struct objc_object Cat;
+typedef struct {} _objc_exc_Cat;
 #endif
 
-struct Person_IMPL {
+struct Cat_IMPL {
 	struct NSObject_IMPL NSObject_IVARS;
+	NSString *_name;
+	int _age;
 };
 
-
 /* @end */
+
+
+// @implementation Cat
+
+// @end
 
 
 int main(int argc, const char * argv[]) {
@@ -34214,4 +34224,142 @@ int main(int argc, const char * argv[]) {
     }
     return 0;
 }
+
+struct _prop_t {
+	const char *name;
+	const char *attributes;
+};
+
+struct _protocol_t;
+
+struct _objc_method {
+	struct objc_selector * _cmd;
+	const char *method_type;
+	void  *_imp;
+};
+
+struct _protocol_t {
+	void * isa;  // NULL
+	const char *protocol_name;
+	const struct _protocol_list_t * protocol_list; // super protocols
+	const struct method_list_t *instance_methods;
+	const struct method_list_t *class_methods;
+	const struct method_list_t *optionalInstanceMethods;
+	const struct method_list_t *optionalClassMethods;
+	const struct _prop_list_t * properties;
+	const unsigned int size;  // sizeof(struct _protocol_t)
+	const unsigned int flags;  // = 0
+	const char ** extendedMethodTypes;
+};
+
+struct _ivar_t {
+	unsigned long int *offset;  // pointer to ivar offset location
+	const char *name;
+	const char *type;
+	unsigned int alignment;
+	unsigned int  size;
+};
+
+struct _class_ro_t {
+	unsigned int flags;
+	unsigned int instanceStart;
+	unsigned int instanceSize;
+	const unsigned char *ivarLayout;
+	const char *name;
+	const struct _method_list_t *baseMethods;
+	const struct _objc_protocol_list *baseProtocols;
+	const struct _ivar_list_t *ivars;
+	const unsigned char *weakIvarLayout;
+	const struct _prop_list_t *properties;
+};
+
+struct _class_t {
+	struct _class_t *isa;
+	struct _class_t *superclass;
+	void *cache;
+	void *vtable;
+	struct _class_ro_t *ro;
+};
+
+struct _category_t {
+	const char *name;
+	struct _class_t *cls;
+	const struct _method_list_t *instance_methods;
+	const struct _method_list_t *class_methods;
+	const struct _protocol_list_t *protocols;
+	const struct _prop_list_t *properties;
+};
+extern "C" __declspec(dllimport) struct objc_cache _objc_empty_cache;
+#pragma warning(disable:4273)
+
+extern "C" unsigned long int OBJC_IVAR_$_Cat$_name __attribute__ ((used, section ("__DATA,__objc_ivar"))) = __OFFSETOFIVAR__(struct Cat, _name);
+extern "C" unsigned long int OBJC_IVAR_$_Cat$_age __attribute__ ((used, section ("__DATA,__objc_ivar"))) = __OFFSETOFIVAR__(struct Cat, _age);
+
+static struct /*_ivar_list_t*/ {
+	unsigned int entsize;  // sizeof(struct _prop_t)
+	unsigned int count;
+	struct _ivar_t ivar_list[2];
+} _OBJC_$_INSTANCE_VARIABLES_Cat __attribute__ ((used, section ("__DATA,__objc_const"))) = {
+	sizeof(_ivar_t),
+	2,
+	{{(unsigned long int *)&OBJC_IVAR_$_Cat$_name, "_name", "@\"NSString\"", 3, 8},
+	 {(unsigned long int *)&OBJC_IVAR_$_Cat$_age, "_age", "i", 2, 4}}
+};
+
+static struct _class_ro_t _OBJC_METACLASS_RO_$_Cat __attribute__ ((used, section ("__DATA,__objc_const"))) = {
+	1, sizeof(struct _class_t), sizeof(struct _class_t), 
+	0, 
+	"Cat",
+	0, 
+	0, 
+	0, 
+	0, 
+	0, 
+};
+
+static struct _class_ro_t _OBJC_CLASS_RO_$_Cat __attribute__ ((used, section ("__DATA,__objc_const"))) = {
+	0, __OFFSETOFIVAR__(struct Cat, _name), sizeof(struct Cat_IMPL), 
+	0, 
+	"Cat",
+	0, 
+	0, 
+	(const struct _ivar_list_t *)&_OBJC_$_INSTANCE_VARIABLES_Cat,
+	0, 
+	0, 
+};
+
+extern "C" __declspec(dllimport) struct _class_t OBJC_METACLASS_$_NSObject;
+
+extern "C" __declspec(dllexport) struct _class_t OBJC_METACLASS_$_Cat __attribute__ ((used, section ("__DATA,__objc_data"))) = {
+	0, // &OBJC_METACLASS_$_NSObject,
+	0, // &OBJC_METACLASS_$_NSObject,
+	0, // (void *)&_objc_empty_cache,
+	0, // unused, was (void *)&_objc_empty_vtable,
+	&_OBJC_METACLASS_RO_$_Cat,
+};
+
+extern "C" __declspec(dllimport) struct _class_t OBJC_CLASS_$_NSObject;
+
+extern "C" __declspec(dllexport) struct _class_t OBJC_CLASS_$_Cat __attribute__ ((used, section ("__DATA,__objc_data"))) = {
+	0, // &OBJC_METACLASS_$_Cat,
+	0, // &OBJC_CLASS_$_NSObject,
+	0, // (void *)&_objc_empty_cache,
+	0, // unused, was (void *)&_objc_empty_vtable,
+	&_OBJC_CLASS_RO_$_Cat,
+};
+static void OBJC_CLASS_SETUP_$_Cat(void ) {
+	OBJC_METACLASS_$_Cat.isa = &OBJC_METACLASS_$_NSObject;
+	OBJC_METACLASS_$_Cat.superclass = &OBJC_METACLASS_$_NSObject;
+	OBJC_METACLASS_$_Cat.cache = &_objc_empty_cache;
+	OBJC_CLASS_$_Cat.isa = &OBJC_METACLASS_$_Cat;
+	OBJC_CLASS_$_Cat.superclass = &OBJC_CLASS_$_NSObject;
+	OBJC_CLASS_$_Cat.cache = &_objc_empty_cache;
+}
+#pragma section(".objc_inithooks$B", long, read, write)
+__declspec(allocate(".objc_inithooks$B")) static void *OBJC_CLASS_SETUP[] = {
+	(void *)&OBJC_CLASS_SETUP_$_Cat,
+};
+static struct _class_t *L_OBJC_LABEL_CLASS_$ [1] __attribute__((used, section ("__DATA, __objc_classlist,regular,no_dead_strip")))= {
+	&OBJC_CLASS_$_Cat,
+};
 static struct IMAGE_INFO { unsigned version; unsigned flag; } _OBJC_IMAGE_INFO = { 0, 2 };
