@@ -14,6 +14,8 @@
 //    NSString *_name;
 //    int _age;
 //}
+- (void)eat;
++ (void)run;
 @end
 
 @implementation Cat
@@ -32,6 +34,8 @@
     
     
     Cat *cat = [[Cat alloc]init];
+    [cat eat];
+    [Cat run];
     
 //    //添加弱引用
 //    __weak Cat *weakCat = cat;
@@ -39,9 +43,9 @@
 //    //添加关联对象
 //    objc_setAssociatedObject(cat, "like", @"mouse", OBJC_ASSOCIATION_COPY_NONATOMIC);
 //    objc_setAssociatedObject(cat, @"eat", nil, OBJC_ASSOCIATION_COPY_NONATOMIC);
-    NSLog(@"cat = %p",cat);
-
-    NSLog(@"Cat = %p",[Cat class]);
+//    NSLog(@"cat = %p",cat);
+//
+//    NSLog(@"Cat = %p",[Cat class]);
 
     
 }
