@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		553B491025DFAD80006E535F /* MBMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = 553B490F25DFAD80006E535F /* MBMonitor.m */; };
 		554894AB2394A1FD008524CC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 554894AA2394A1FD008524CC /* AppDelegate.m */; };
 		554894AE2394A1FD008524CC /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 554894AD2394A1FD008524CC /* SceneDelegate.m */; };
 		554894B12394A1FD008524CC /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 554894B02394A1FD008524CC /* ViewController.m */; };
@@ -17,6 +18,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		553B490E25DFAD80006E535F /* MBMonitor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MBMonitor.h; sourceTree = "<group>"; };
+		553B490F25DFAD80006E535F /* MBMonitor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MBMonitor.m; sourceTree = "<group>"; };
 		554894A62394A1FD008524CC /* RunLoopDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RunLoopDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		554894A92394A1FD008524CC /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		554894AA2394A1FD008524CC /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -223,6 +226,8 @@
 				554894AD2394A1FD008524CC /* SceneDelegate.m */,
 				554894AF2394A1FD008524CC /* ViewController.h */,
 				554894B02394A1FD008524CC /* ViewController.m */,
+				553B490E25DFAD80006E535F /* MBMonitor.h */,
+				553B490F25DFAD80006E535F /* MBMonitor.m */,
 				554894B22394A1FD008524CC /* Main.storyboard */,
 				554894B52394A1FE008524CC /* Assets.xcassets */,
 				554894B72394A1FE008524CC /* LaunchScreen.storyboard */,
@@ -473,6 +478,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				554894B12394A1FD008524CC /* ViewController.m in Sources */,
+				553B491025DFAD80006E535F /* MBMonitor.m in Sources */,
 				554894AB2394A1FD008524CC /* AppDelegate.m in Sources */,
 				554894BC2394A1FE008524CC /* main.m in Sources */,
 				554894AE2394A1FD008524CC /* SceneDelegate.m in Sources */,

@@ -29,10 +29,10 @@
     [self.window makeKeyAndVisible];
     
     //gcd基本用法
-        GcdViewController *vc = [[GcdViewController alloc]init];
+//        GcdViewController *vc = [[GcdViewController alloc]init];
     
     //    gcd其他用法（栅栏、延迟、单次等）
-    //    OtherUsageController *vc = [[OtherUsageController alloc]init];
+        OtherUsageController *vc = [[OtherUsageController alloc]init];
     
     //    gcd 加锁
 //    GcdLockViewController *vc = [[GcdLockViewController alloc]init];
