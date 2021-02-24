@@ -19,6 +19,7 @@
 		074D369B21EC7A81006041BB /* UserCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 074D369A21EC7A81006041BB /* UserCenter.m */; };
 		074D369E21EC7B0A006041BB /* NSThreadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 074D369D21EC7B0A006041BB /* NSThreadViewController.m */; };
 		074D36A221EC83ED006041BB /* NSOperationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 074D36A121EC83ED006041BB /* NSOperationViewController.m */; };
+		55E5761325E48D06004FC39D /* MultipleRequestController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55E5761225E48D06004FC39D /* MultipleRequestController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +45,8 @@
 		074D369D21EC7B0A006041BB /* NSThreadViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSThreadViewController.m; sourceTree = "<group>"; };
 		074D36A021EC83ED006041BB /* NSOperationViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSOperationViewController.h; sourceTree = "<group>"; };
 		074D36A121EC83ED006041BB /* NSOperationViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSOperationViewController.m; sourceTree = "<group>"; };
+		55E5761125E48D06004FC39D /* MultipleRequestController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MultipleRequestController.h; sourceTree = "<group>"; };
+		55E5761225E48D06004FC39D /* MultipleRequestController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MultipleRequestController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +102,8 @@
 				074D369421EC79FC006041BB /* OtherUsageController.m */,
 				074D369621EC7A2F006041BB /* GcdLockViewController.h */,
 				074D369721EC7A2F006041BB /* GcdLockViewController.m */,
+				55E5761125E48D06004FC39D /* MultipleRequestController.h */,
+				55E5761225E48D06004FC39D /* MultipleRequestController.m */,
 				074D369921EC7A81006041BB /* UserCenter.h */,
 				074D369A21EC7A81006041BB /* UserCenter.m */,
 			);
@@ -202,6 +207,7 @@
 				074D369E21EC7B0A006041BB /* NSThreadViewController.m in Sources */,
 				072622E021EDBAE100F38877 /* MBOperation.m in Sources */,
 				074D369221EC79AA006041BB /* GcdViewController.m in Sources */,
+				55E5761325E48D06004FC39D /* MultipleRequestController.m in Sources */,
 				074D369B21EC7A81006041BB /* UserCenter.m in Sources */,
 				074D36A221EC83ED006041BB /* NSOperationViewController.m in Sources */,
 			);
@@ -346,14 +352,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = QUMSF8EMJ8;
+				DEVELOPMENT_TEAM = 6JFYPR78H7;
 				INFOPLIST_FILE = ThreadDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.ibiaoma.ThreadDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hzgosun.GriddingPro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -364,14 +370,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = QUMSF8EMJ8;
+				DEVELOPMENT_TEAM = 6JFYPR78H7;
 				INFOPLIST_FILE = ThreadDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.ibiaoma.ThreadDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hzgosun.GriddingPro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};

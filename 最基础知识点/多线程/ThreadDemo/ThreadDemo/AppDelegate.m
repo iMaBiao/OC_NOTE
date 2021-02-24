@@ -13,9 +13,8 @@
 #import "GcdLockViewController.h"
 
 #import "NSOperationViewController.h"
-
+#import "MultipleRequestController.h"
 @interface AppDelegate ()
-
 @end
 
 @implementation AppDelegate
@@ -23,6 +22,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+
     
     self.window = [[UIWindow alloc]init];
     self.window.frame = [UIScreen mainScreen].bounds;
@@ -32,7 +33,7 @@
 //        GcdViewController *vc = [[GcdViewController alloc]init];
     
     //    gcd其他用法（栅栏、延迟、单次等）
-        OtherUsageController *vc = [[OtherUsageController alloc]init];
+//        OtherUsageController *vc = [[OtherUsageController alloc]init];
     
     //    gcd 加锁
 //    GcdLockViewController *vc = [[GcdLockViewController alloc]init];
@@ -40,6 +41,9 @@
     
 //    NSOperation
 //    NSOperationViewController *vc = [[NSOperationViewController alloc]init];
+    
+    //多网络请求
+    MultipleRequestController *vc = [[MultipleRequestController alloc]init];
     
     self.window.rootViewController = vc;
     
