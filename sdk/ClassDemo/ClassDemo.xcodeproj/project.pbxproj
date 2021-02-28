@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		074E325425D39A8900541BBD /* Cat.m in Sources */ = {isa = PBXBuildFile; fileRef = 074E325325D39A8900541BBD /* Cat.m */; };
+		074E325D25D39AD500541BBD /* Cat+Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 074E325C25D39AD500541BBD /* Cat+Test.m */; };
+		074E333A25D6CEA600541BBD /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 074E333925D6CEA600541BBD /* Person.m */; };
+		074E333E25D6CEB800541BBD /* Student.m in Sources */ = {isa = PBXBuildFile; fileRef = 074E333D25D6CEB800541BBD /* Student.m */; };
 		55F40BCB25C39E8F00BCFB84 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F40BCA25C39E8F00BCFB84 /* main.m */; };
 /* End PBXBuildFile section */
 
@@ -23,6 +27,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		074E325225D39A8900541BBD /* Cat.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Cat.h; sourceTree = "<group>"; };
+		074E325325D39A8900541BBD /* Cat.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Cat.m; sourceTree = "<group>"; };
+		074E325B25D39AD500541BBD /* Cat+Test.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Cat+Test.h"; sourceTree = "<group>"; };
+		074E325C25D39AD500541BBD /* Cat+Test.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "Cat+Test.m"; sourceTree = "<group>"; };
+		074E333825D6CEA600541BBD /* Person.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Person.h; sourceTree = "<group>"; };
+		074E333925D6CEA600541BBD /* Person.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Person.m; sourceTree = "<group>"; };
+		074E333C25D6CEB800541BBD /* Student.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Student.h; sourceTree = "<group>"; };
+		074E333D25D6CEB800541BBD /* Student.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Student.m; sourceTree = "<group>"; };
 		55F40BC725C39E8F00BCFB84 /* ClassDemo */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ClassDemo; sourceTree = BUILT_PRODUCTS_DIR; };
 		55F40BCA25C39E8F00BCFB84 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		55F40BD225C3AA9000BCFB84 /* main-arm64.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "main-arm64.cpp"; sourceTree = "<group>"; };
@@ -60,6 +72,14 @@
 			children = (
 				55F40BD225C3AA9000BCFB84 /* main-arm64.cpp */,
 				55F40BCA25C39E8F00BCFB84 /* main.m */,
+				074E325225D39A8900541BBD /* Cat.h */,
+				074E325325D39A8900541BBD /* Cat.m */,
+				074E325B25D39AD500541BBD /* Cat+Test.h */,
+				074E325C25D39AD500541BBD /* Cat+Test.m */,
+				074E333825D6CEA600541BBD /* Person.h */,
+				074E333925D6CEA600541BBD /* Person.m */,
+				074E333C25D6CEB800541BBD /* Student.h */,
+				074E333D25D6CEB800541BBD /* Student.m */,
 			);
 			path = ClassDemo;
 			sourceTree = "<group>";
@@ -120,6 +140,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				074E325425D39A8900541BBD /* Cat.m in Sources */,
+				074E325D25D39AD500541BBD /* Cat+Test.m in Sources */,
+				074E333E25D6CEB800541BBD /* Student.m in Sources */,
+				074E333A25D6CEA600541BBD /* Person.m in Sources */,
 				55F40BCB25C39E8F00BCFB84 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

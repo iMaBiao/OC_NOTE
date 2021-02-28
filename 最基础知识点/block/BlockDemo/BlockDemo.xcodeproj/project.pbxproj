@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0797745925EA94980037AF49 /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 0797745825EA94980037AF49 /* Person.m */; };
 		07CC0A9D2227E0DD008EA446 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CC0A9C2227E0DD008EA446 /* AppDelegate.m */; };
 		07CC0AA02227E0DD008EA446 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CC0A9F2227E0DD008EA446 /* ViewController.m */; };
 		07CC0AA32227E0DD008EA446 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 07CC0AA12227E0DD008EA446 /* Main.storyboard */; };
@@ -16,6 +17,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0797744F25E69D260037AF49 /* ViewController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ViewController.cpp; sourceTree = "<group>"; };
+		0797745725EA94980037AF49 /* Person.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Person.h; sourceTree = "<group>"; };
+		0797745825EA94980037AF49 /* Person.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Person.m; sourceTree = "<group>"; };
 		07CC0A982227E0DD008EA446 /* BlockDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BlockDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		07CC0A9B2227E0DD008EA446 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		07CC0A9C2227E0DD008EA446 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -62,6 +66,9 @@
 				07CC0A9C2227E0DD008EA446 /* AppDelegate.m */,
 				07CC0A9E2227E0DD008EA446 /* ViewController.h */,
 				07CC0A9F2227E0DD008EA446 /* ViewController.m */,
+				0797744F25E69D260037AF49 /* ViewController.cpp */,
+				0797745725EA94980037AF49 /* Person.h */,
+				0797745825EA94980037AF49 /* Person.m */,
 				07CC0AA12227E0DD008EA446 /* Main.storyboard */,
 				07CC0AA42227E0DF008EA446 /* Assets.xcassets */,
 				07CC0AA62227E0DF008EA446 /* LaunchScreen.storyboard */,
@@ -143,6 +150,7 @@
 			files = (
 				07CC0AA02227E0DD008EA446 /* ViewController.m in Sources */,
 				07CC0AAB2227E0DF008EA446 /* main.m in Sources */,
+				0797745925EA94980037AF49 /* Person.m in Sources */,
 				07CC0A9D2227E0DD008EA446 /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -285,6 +293,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_OBJC_ARC = NO;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QUMSF8EMJ8;
 				INFOPLIST_FILE = BlockDemo/Info.plist;
@@ -303,6 +312,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_OBJC_ARC = NO;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QUMSF8EMJ8;
 				INFOPLIST_FILE = BlockDemo/Info.plist;
