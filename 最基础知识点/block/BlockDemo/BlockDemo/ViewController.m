@@ -7,12 +7,18 @@
 //
 
 #import "ViewController.h"
+
 #import "Person.h"
+
+
 @interface ViewController ()
 @property(nonatomic ,strong)NSString *name;
 @end
 
 @implementation ViewController
+static int c = 10;
+
+typedef void (^Block)(void);
 
 extern void _objc_autoreleasePoolPrint(void);
 
@@ -24,6 +30,7 @@ extern void _objc_autoreleasePoolPrint(void);
        
 //    NSLog(@"%@", [NSRunLoop mainRunLoop]);
     
+
 //    @autoreleasepool {
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
             NSLog(@"%s 子线程begin",__func__);
@@ -39,6 +46,59 @@ extern void _objc_autoreleasePoolPrint(void);
     NSLog(@"%s",__func__);
     
     
+
+//    auto int a = 10;
+//    static int b = 11;
+//    void(^block)(void) = ^{
+//        NSLog(@"hello, a = %d, b = %d", a,b);
+//    };
+//    a = 1;
+//    b = 2;
+//    block();
+  
+    
+    
+//    void(^block1)(void) = ^{
+//        NSLog(@"没有访问变量");
+//    };
+//    block1();
+//    NSLog(@"%@",[block1 class]);
+//
+//
+//    auto int a = 10;
+//    void(^block2)(void) = ^{
+//        NSLog(@"访问auto变量, a = %d,", a);
+//    };
+//    block2();
+//    NSLog(@"%@",[block2 class]);
+//
+//    NSLog(@"%@",[[block2 copy] class]);
+    
+    
+//    Block block;
+//    {
+//        Person *p = [[Person alloc]init];
+//        block = ^{
+//            NSLog(@"%s p= %@",__func__,p);
+//        };
+//
+////        [p release];
+//    }
+//
+//    block();
+//    NSLog(@"%s ",__func__);
+//
+    
+    
+     __block int age = 10;
+    
+    void(^block)(void) = ^{
+        NSLog(@"%s age = %d",__func__,age);
+    };
+    block();
+    age = 20;
+    NSLog(@"%s 最后age = %d",__func__,age);
+
 }
 //- (void)viewWillAppear:(BOOL)animated
 //{
