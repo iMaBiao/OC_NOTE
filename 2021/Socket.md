@@ -6,7 +6,7 @@
 
 
 
-![image-20210302094314277](/Users/gosun/Desktop/Github/OC_NOTE/2021/img/image-20210302094314277.png)
+![image-20210302094314277](./img/image-20210302094314277.png)
 
 #### 要素
 
@@ -339,7 +339,7 @@ if (![self.clientSocket connectToHost:@"ip地址" onPort: "端口号" error:&err
 
 很多小伙伴可能又会感觉到疑惑了，那么我们在这心跳间隔的3-5分钟如果连接假在线（例如在地铁电梯这种环境下）。那么我们岂不是无法保证消息的即时性么？这显然是我们无法接受的，所以业内的解决方案是采用双向的`PingPong`机制。
 
-![image-20210302145155316](/Users/gosun/Desktop/Github/OC_NOTE/2021/img/pingpong.png)
+![image-20210302145155316](./img/pingpong.png)
 
 当服务端发出一个`Ping`，客户端没有在约定的时间内返回响应的`ack`，则认为客户端已经不在线，这时我们`Server`端会主动断开`Scoket`连接，并且改由`APNS`推送的方式发送消息。
 
