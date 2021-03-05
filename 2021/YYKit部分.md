@@ -197,3 +197,6 @@ https://www.jianshu.com/p/154451e4bd42
 
 YYAsyncLayer 是 ibireme 写的一个异步绘制的轮子，虽然代码加起来才 300 行左右，但质量比较高，涉及到很多优化思维，值得学习。
 
+
+
+![img](./img/YYAsyncLayer.png)
