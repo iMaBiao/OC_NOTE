@@ -19,3 +19,4 @@
 
 
 4、加锁 @synchronized(self)   self?
+
